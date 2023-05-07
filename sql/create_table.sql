@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS project.trips;
+DROP TABLE IF EXISTS trips;
 
-CREATE TABLE IF NOT EXISTS project.trips (
+CREATE TABLE IF NOT EXISTS trips (
     trip_id VARCHAR(120) PRIMARY KEY,
     call_type VARCHAR(10) NOT NULL,
     origin_call DOUBLE PRECISION NULL,

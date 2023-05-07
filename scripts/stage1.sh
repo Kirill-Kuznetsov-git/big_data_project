@@ -1,7 +1,7 @@
 #!/bin/bash
 
-psql -U postgres -f ../sql/create_table.sql
+psql -d project -U postgres -f ../sql/create_table.sql
 
 echo "Table created successfully."
 
-psql -U postgres -f ../sql/load_csv.sql
+psql -d project -U postgres -f ../sql/load_csv.sql
