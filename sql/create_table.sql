@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS trips;
+DROP TABLE IF EXISTS project.trips;
 
-CREATE TABLE IF NOT EXISTS trips (
+CREATE TABLE IF NOT EXISTS project.trips (
     trip_id VARCHAR(120) PRIMARY KEY,
     call_type VARCHAR(10) NOT NULL,
     origin_call DOUBLE PRECISION NULL,
@@ -11,8 +11,3 @@ CREATE TABLE IF NOT EXISTS trips (
     missing_data BOOLEAN NOT NULL,
     polyline TEXT NOT NULL
 );
-
-CREATE OR REPLACE RULE "trips_on_duplicate_ignore" AS ON INSERT TO "trips"
-  WHERE EXISTS(SELECT 1 FROM trips
-                WHERE (trip_id)=(NEW.trip_id))
-  DO INSTEAD NOTHING;
