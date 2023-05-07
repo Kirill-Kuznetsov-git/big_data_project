@@ -12,3 +12,7 @@ CREATE TABLE IF NOT EXISTS trips (
     polyline TEXT NOT NULL
 );
 
+CREATE OR REPLACE RULE "trips_on_duplicate_ignore" AS ON INSERT TO "trips"
+  WHERE EXISTS(SELECT 1 FROM trips
+                WHERE (trip_id)=(NEW.trip_id))
+  DO INSTEAD NOTHING;
