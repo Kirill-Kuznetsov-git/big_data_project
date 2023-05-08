@@ -3,6 +3,7 @@ from pyspark.sql import SparkSession
 from pyspark.ml import Pipeline
 from pyspark.sql.types import IntegerType
 
+from pyspark.sql.functions import date_format, to_date, dayofweek
 
 
 spark = SparkSession.builder\
@@ -32,8 +33,20 @@ trips.createOrReplaceTempView('trips')
 
 trips.printSchema()
 
-trips = trips.drop("polyline == []")
+print("\n\n Process Date \n\n")
 
+
+# add new columns for year, month, day, hour, and day of the week
+trips = trips.withColumn('year', date_format('timestamp', 'y')) \
+    .withColumn('month', date_format('timestamp', 'M')) \
+    .withColumn('day', date_format('timestamp', 'd')) \
+    .withColumn('hour', date_format('timestamp', 'H')) \
+    .withColumn('day_of_week', dayofweek(to_date('timestamp'))) 
+
+
+print("\n\n Process Polyline \n\n")
+
+trips = trips.drop("polyline == []")
 trips = trips.filter("missing_data == false")
 
 
