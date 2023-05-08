@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 from pyspark.ml import Pipeline
 from pyspark.sql.types import IntegerType
 
-from pyspark.sql.functions import date_format, to_date, dayofweek, from_unixtime
+from pyspark.sql.functions import date_format, to_date, dayofweek, from_unixtime, avg
 
 
 spark = SparkSession.builder\
@@ -46,6 +46,7 @@ trips = trips.withColumn('year', date_format('timestamp', 'y')) \
     .withColumn('day_of_week', dayofweek(to_date('timestamp'))) 
 
 
+
 print("\n\n Process Polyline \n\n")
 
 trips = trips.drop("polyline == []")
@@ -62,3 +63,9 @@ trips = trips.withColumn('trip_time_sec', trip_time_sec_udf(trips['POLYLINE']))
 
 # Show the first few rows of the DataFrame
 trips.show(5)
+
+# EXTRACT INSIGHTS
+
+avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time').alias('avg_trip_time'))
+
+avg_trip_time_by_dow.show()
