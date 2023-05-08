@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 from pyspark.ml import Pipeline
 from pyspark.sql.types import IntegerType
 
-from pyspark.sql.functions import date_format, to_date, dayofweek, from_unixtime, avg
+from pyspark.sql.functions import date_format, to_date, dayofweek, from_unixtime, avg, count, when, col
 
 
 spark = SparkSession.builder\
@@ -66,6 +66,16 @@ trips.show(5)
 
 # EXTRACT INSIGHTS
 
-avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time_sec').alias('avg_trip_time'))
-avg_trip_time_by_dow = avg_trip_time_by_dow.orderBy('day_of_week')
-avg_trip_time_by_dow.show()
+
+print("\nMissing values\n\n")
+missing_vals = trips.select([count(when(col(c).isNull(), c)).alias(c) for c in trips.columns])
+missing_vals.show()
+# avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time_sec').alias('avg_trip_time'))
+# avg_trip_time_by_dow = avg_trip_time_by_dow.orderBy('day_of_week')
+# avg_trip_time_by_dow.show()
+
+
+print("\nHours\n\n")
+avg_trip_time_by_h = trips.groupBy('hour').agg(avg('trip_time_sec').alias('avg_trip_time'))
+avg_trip_time_by_h = avg_trip_time_by_h.orderBy('hour')
+avg_trip_time_by_h.show()
