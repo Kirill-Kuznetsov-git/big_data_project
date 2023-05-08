@@ -35,7 +35,7 @@ trips.printSchema()
 trips = trips.filter("missing_data == false")
 
 
-trip_time_sec_udf = F.udf(lambda x: (x.split('],')-1)*15, IntegerType())
+trip_time_sec_udf = F.udf(lambda x: (len(x.split('],'))-1)*15, IntegerType())
 
 # Add a new column with the trip time sec
 trips = trips.withColumn('trip_time_sec', trip_time_sec_udf(trips['POLYLINE']))
