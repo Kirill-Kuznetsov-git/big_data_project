@@ -32,7 +32,7 @@ trips.createOrReplaceTempView('trips')
 trips.printSchema()
 
 
-trips = trips.filter(trips.missing_data is False)
+trips = trips.filter("missing_data == false")
 
 
 trip_time_sec_udf = F.udf(lambda x: (x.split('],')-1)*15, IntegerType())
