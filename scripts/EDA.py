@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 from pyspark.ml import Pipeline
 from pyspark.sql.types import IntegerType
 
-from pyspark.sql.functions import date_format, to_date, dayofweek
+from pyspark.sql.functions import date_format, to_date, dayofweek, from_unixtime
 
 
 spark = SparkSession.builder\
@@ -35,6 +35,8 @@ trips.printSchema()
 
 print("\n\n Process Date \n\n")
 
+# convert timestamp from bigint to timestamp
+trips = trips.withColumn('timestamp', from_unixtime(trips['timestamp']))
 
 # add new columns for year, month, day, hour, and day of the week
 trips = trips.withColumn('year', date_format('timestamp', 'y')) \
