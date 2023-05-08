@@ -1,5 +1,9 @@
 #!/bin/bash
 
+wget https://jdbc.postgresql.org/download/postgresql-42.6.0.jar --no-check-certificate
+
+cp  postgresql-42.6.0.jar /usr/hdp/current/sqoop-client/lib/
+
 psql -U postgres -f ../sql/create_database.sql
 
 echo "Database created successfully."
