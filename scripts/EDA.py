@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 from pyspark.ml import Pipeline
 from pyspark.sql.types import IntegerType
 
-from pyspark.sql.functions import date_format, to_date, dayofweek, from_unixtime, avg, count, when, col
+from pyspark.sql.functions import date_format, to_date, dayofweek, from_unixtime, avg, count, when, col, max, min
 
 
 spark = SparkSession.builder\
@@ -70,10 +70,11 @@ trips.show(5)
 missing_vals = trips.select([count(when(col(c).isNull(), c)).alias(c) for c in trips.columns])
 print("\nMissing values\n\n")
 missing_vals.show()
-# avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time_sec').alias('avg_trip_time'))
-# avg_trip_time_by_dow = avg_trip_time_by_dow.orderBy('day_of_week')
-# print("\nDay of week\n\n")
-# avg_trip_time_by_dow.show()
+
+avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time_sec').alias('avg_trip_time'))
+avg_trip_time_by_dow = avg_trip_time_by_dow.orderBy('day_of_week')
+print("\nDay of week\n\n")
+avg_trip_time_by_dow.show()
 
 
 avg_trip_time_by_h = trips.groupBy('hour').agg(avg('trip_time_sec').alias('avg_trip_time'))
@@ -89,3 +90,14 @@ avg_trip_time_by_call_t.show()
 count_trip_time_by_call_t = trips.groupBy('call_type').agg(count('trip_time_sec').alias('count_trip_time'))
 print("\call type (count)\n\n")
 count_trip_time_by_call_t.show()
+
+
+# assuming that `trips` is the name of the DataFrame that contains the `trip_time_sec` column
+min_max_avg = trips.agg(avg('trip_time_sec').alias('avg_trip_time'),
+                   max('trip_time_sec').alias('max_trip_time'),
+                   min('trip_time_sec').alias('min_trip_time'))
+min_max_avg.show()
+
+
+day_type_count = trips.groupBy('day_type').count()
+day_type_count.show()
