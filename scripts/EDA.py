@@ -29,16 +29,21 @@ sc = spark.sparkContext
 trips = spark.read.format("avro").table('projectdb.trips')
 trips.createOrReplaceTempView('trips')
 
+
 trips.printSchema()
 
+trips = trips.drop("polyline == []")
 
 trips = trips.filter("missing_data == false")
 
 
+polyline_length_udf = F.udf(lambda x: len(x.split('],'))-1, IntegerType())
 trip_time_sec_udf = F.udf(lambda x: (len(x.split('],'))-1)*15, IntegerType())
 
 # Add a new column with the trip time sec
+trips = trips.withColumn('polyline_length', polyline_length_udf(trips['POLYLINE']))
 trips = trips.withColumn('trip_time_sec', trip_time_sec_udf(trips['POLYLINE']))
+
 
 # Show the first few rows of the DataFrame
 trips.show(5)
