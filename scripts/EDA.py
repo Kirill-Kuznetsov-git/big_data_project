@@ -66,6 +66,6 @@ trips.show(5)
 
 # EXTRACT INSIGHTS
 
-avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time_sec').alias('avg_trip_time')).orderBy('day_of_week')
-
+avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time_sec').alias('avg_trip_time'))
+avg_trip_time_by_dow = avg_trip_time_by_dow.orderBy('day_of_week')
 avg_trip_time_by_dow.show()
