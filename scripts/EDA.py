@@ -49,7 +49,6 @@ trips = trips.withColumn('year', date_format('timestamp', 'y')) \
 
 print("\n\n Process Polyline \n\n")
 
-trips = trips.drop("polyline == []")
 trips = trips.filter("missing_data == false")
 
 
@@ -60,6 +59,7 @@ trip_time_sec_udf = F.udf(lambda x: (len(x.split('],'))-1)*15, IntegerType())
 trips = trips.withColumn('polyline_length', polyline_length_udf(trips['POLYLINE']))
 trips = trips.withColumn('trip_time_sec', trip_time_sec_udf(trips['POLYLINE']))
 
+trips = trips.where(trips.trip_time_sec != 0)
 
 # Show the first few rows of the DataFrame
 trips.show(5)
@@ -67,29 +67,29 @@ trips.show(5)
 # EXTRACT INSIGHTS
 
 
-missing_vals = trips.select([count(when(col(c).isNull(), c)).alias(c) for c in trips.columns])
-print("\nMissing values\n\n")
-missing_vals.show()
+# missing_vals = trips.select([count(when(col(c).isNull(), c)).alias(c) for c in trips.columns])
+# missing_vals.show()
+# print("Missing values\n\n")
 
-avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time_sec').alias('avg_trip_time'))
-avg_trip_time_by_dow = avg_trip_time_by_dow.orderBy('day_of_week')
-print("\nDay of week\n\n")
-avg_trip_time_by_dow.show()
-
-
-avg_trip_time_by_h = trips.groupBy('hour').agg(avg('trip_time_sec').alias('avg_trip_time'))
-avg_trip_time_by_h = avg_trip_time_by_h.orderBy('hour')
-print("\nHours\n\n")
-avg_trip_time_by_h.show()
+# avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time_sec').alias('avg_trip_time'))
+# avg_trip_time_by_dow = avg_trip_time_by_dow.orderBy('day_of_week')
+# avg_trip_time_by_dow.show()
+# print("Day of week\n\n")
 
 
-avg_trip_time_by_call_t = trips.groupBy('call_type').agg(avg('trip_time_sec').alias('avg_trip_time'))
-print("\call type (avg)\n\n")
-avg_trip_time_by_call_t.show()
+# avg_trip_time_by_h = trips.groupBy('hour').agg(avg('trip_time_sec').alias('avg_trip_time'))
+# avg_trip_time_by_h = avg_trip_time_by_h.orderBy('hour')
+# avg_trip_time_by_h.show()
+# print("Hours\n\n")
 
-count_trip_time_by_call_t = trips.groupBy('call_type').agg(count('trip_time_sec').alias('count_trip_time'))
-print("\call type (count)\n\n")
-count_trip_time_by_call_t.show()
+
+# avg_trip_time_by_call_t = trips.groupBy('call_type').agg(avg('trip_time_sec').alias('avg_trip_time'))
+# avg_trip_time_by_call_t.show()
+# print("call type (avg)\n\n")
+
+# count_trip_time_by_call_t = trips.groupBy('call_type').agg(count('trip_time_sec').alias('count_trip_time'))
+# count_trip_time_by_call_t.show()
+# print("call type (count)\n\n")
 
 
 # assuming that `trips` is the name of the DataFrame that contains the `trip_time_sec` column
@@ -97,7 +97,8 @@ min_max_avg = trips.agg(avg('trip_time_sec').alias('avg_trip_time'),
                    max('trip_time_sec').alias('max_trip_time'),
                    min('trip_time_sec').alias('min_trip_time'))
 min_max_avg.show()
+print("avg, max, min\n\n")
 
-
-day_type_count = trips.groupBy('day_type').count()
-day_type_count.show()
+# day_type_count = trips.groupBy('day_type').count()
+# day_type_count.show()
+# print("day type count\n\n")
