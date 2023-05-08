@@ -71,33 +71,33 @@ csv_dir = '/root'
 missing_vals = trips.select([count(when(col(c).isNull(), c)).alias(c) for c in trips.columns])
 missing_vals.show()
 print("Missing values\n\n")
-missing_vals.write.csv(f"{csv_dir}/q1.csv")
+missing_vals.write.csv("%s/q1.csv" % csv_dir)
 
 avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time_sec').alias('avg_trip_time'))
 avg_trip_time_by_dow = avg_trip_time_by_dow.orderBy('day_of_week')
 avg_trip_time_by_dow.show()
 print("Day of week\n\n")
-avg_trip_time_by_dow.write.csv(f"{csv_dir}/q2.csv")
+avg_trip_time_by_dow.write.csv("%s/q2.csv" % csv_dir)
 
 
 avg_trip_time_by_h = trips.groupBy('hour').agg(avg('trip_time_sec').alias('avg_trip_time'))
 avg_trip_time_by_h = avg_trip_time_by_h.orderBy('hour')
 avg_trip_time_by_h.show()
 print("Hours\n\n")
-avg_trip_time_by_h.write.csv(f"{csv_dir}/q3.csv")
+avg_trip_time_by_h.write.csv("%s/q3.csv" % csv_dir)
 
 
 
 avg_trip_time_by_call_t = trips.groupBy('call_type').agg(avg('trip_time_sec').alias('avg_trip_time'))
 avg_trip_time_by_call_t.show()
 print("call type (avg)\n\n")
-avg_trip_time_by_call_t.write.csv(f"{csv_dir}/q4.csv")
+avg_trip_time_by_call_t.write.csv("%s/q4.csv" % csv_dir)
 
 
 count_trip_time_by_call_t = trips.groupBy('call_type').agg(count('trip_time_sec').alias('count_trip_time'))
 count_trip_time_by_call_t.show()
 print("call type (count)\n\n")
-count_trip_time_by_call_t.write.csv(f"{csv_dir}/q5.csv")
+count_trip_time_by_call_t.write.csv("%s/q5.csv" % csv_dir)
 
 
 # assuming that `trips` is the name of the DataFrame that contains the `trip_time_sec` column
@@ -106,9 +106,9 @@ min_max_avg = trips.agg(avg('trip_time_sec').alias('avg_trip_time'),
                    min('trip_time_sec').alias('min_trip_time'))
 min_max_avg.show()
 print("avg, max, min\n\n")
-min_max_avg.write.csv(f"{csv_dir}/q6.csv")
+min_max_avg.write.csv("%s/q6.csv" % csv_dir)
 
 day_type_count = trips.groupBy('day_type').count()
 day_type_count.show()
 print("day type count\n\n")
-day_type_count.write.csv(f"{csv_dir}/q7.csv")
+day_type_count.write.csv("%s/q7.csv" % csv_dir)
