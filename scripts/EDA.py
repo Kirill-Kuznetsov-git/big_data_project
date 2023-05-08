@@ -1,6 +1,8 @@
 import pyspark.sql.functions as F
 from pyspark.sql import SparkSession
 from pyspark.ml import Pipeline
+from pyspark.sql.types import IntegerType
+
 
 
 spark = SparkSession.builder\
@@ -17,14 +19,26 @@ spark = SparkSession.builder\
 
 sc = spark.sparkContext
 
-print(sc)
+# print(sc)
 
 
-print(spark.catalog.listDatabases())
+# print(spark.catalog.listDatabases())
 
-print(spark.catalog.listTables("projectdb"))
+# print(spark.catalog.listTables("projectdb"))
 
 trips = spark.read.format("avro").table('projectdb.trips')
 trips.createOrReplaceTempView('trips')
 
 trips.printSchema()
+
+
+trips = trips.filter(trips.missing_data is False)
+
+
+trip_time_sec_udf = F.udf(lambda x: (x.split('],')-1)*15, IntegerType())
+
+# Add a new column with the trip time sec
+trips = trips.withColumn('trip_time_sec', trip_time_sec_udf(trips['POLYLINE']))
+
+# Show the first few rows of the DataFrame
+trips.show(5)
