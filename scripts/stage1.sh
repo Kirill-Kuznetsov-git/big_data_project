@@ -4,15 +4,15 @@ wget https://jdbc.postgresql.org/download/postgresql-42.6.0.jar --no-check-certi
 
 cp  postgresql-42.6.0.jar /usr/hdp/current/sqoop-client/lib/
 
-psql -U postgres -f ../sql/create_database.sql
+psql -U postgres -f sql/create_database.sql
 
 echo "Database created successfully."
 
-psql -d project -U postgres -f ../sql/create_table.sql
+psql -d project -U postgres -f sql/create_table.sql
 
 echo "Table created successfully."
 
-psql -d project -U postgres -f ../sql/load_csv.sql
+psql -d project -U postgres -f sql/load_csv.sql
 
 echo "Data from csv loaded successfully."
 

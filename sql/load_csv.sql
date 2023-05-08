@@ -1,1 +1,1 @@
-\COPY trips FROM '../data/trips.tsv' DELIMITER E'\t' CSV HEADER;
+\COPY trips FROM 'data/trips.tsv' DELIMITER E'\t' CSV HEADER;
