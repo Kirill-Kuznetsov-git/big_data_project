@@ -67,15 +67,25 @@ trips.show(5)
 # EXTRACT INSIGHTS
 
 
-print("\nMissing values\n\n")
 missing_vals = trips.select([count(when(col(c).isNull(), c)).alias(c) for c in trips.columns])
+print("\nMissing values\n\n")
 missing_vals.show()
 # avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time_sec').alias('avg_trip_time'))
 # avg_trip_time_by_dow = avg_trip_time_by_dow.orderBy('day_of_week')
+# print("\nDay of week\n\n")
 # avg_trip_time_by_dow.show()
 
 
-print("\nHours\n\n")
 avg_trip_time_by_h = trips.groupBy('hour').agg(avg('trip_time_sec').alias('avg_trip_time'))
 avg_trip_time_by_h = avg_trip_time_by_h.orderBy('hour')
+print("\nHours\n\n")
 avg_trip_time_by_h.show()
+
+
+avg_trip_time_by_call_t = trips.groupBy('call_type').agg(avg('trip_time_sec').alias('avg_trip_time'))
+print("\call type (avg)\n\n")
+avg_trip_time_by_call_t.show()
+
+count_trip_time_by_call_t = trips.groupBy('call_type').agg(count('trip_time_sec').alias('count_trip_time'))
+print("\call type (count)\n\n")
+count_trip_time_by_call_t.show()
