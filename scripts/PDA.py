@@ -55,21 +55,22 @@ trips.show(5)
 print("\n\n Polyline Length and Call Type as features \n\n")
 
 from pyspark.sql.functions import col
-from pyspark.ml.feature import OneHotEncoder, VectorAssembler
+from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler
 from pyspark.ml.linalg import Vectors
 from pyspark.ml import Pipeline
 
-# create example dataframe with 'category' column
+# categorical feature label indexing
+indexer = StringIndexer(inputCol="call_type", outputCol="call_type_index")
 
 # create OneHotEncoderEstimator
-encoder = OneHotEncoder(inputCols=["call_type"],
+encoder = OneHotEncoder(inputCols=["call_type_index"],
                         outputCols=["call_type_vec"])
 
 assembler = VectorAssembler(
     inputCols=["polyline_length", "call_type_vec"],
     outputCol="features")
 
-pipeline = Pipeline(stages=[encoder, assembler])
+pipeline = Pipeline(stages=[indexer, encoder, assembler])
 
 # fit and transform dataframe
 pipeline_model = pipeline.fit(trips)
