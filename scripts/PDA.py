@@ -55,15 +55,15 @@ trips.show(5)
 print("\n\n Polyline Length and Call Type as features \n\n")
 
 from pyspark.sql.functions import col
-from pyspark.ml.feature import OneHotEncoderEstimator, VectorAssembler
+from pyspark.ml.feature import OneHotEncoder, VectorAssembler
 from pyspark.ml.linalg import Vectors
 from pyspark.ml import Pipeline
 
 # create example dataframe with 'category' column
 
 # create OneHotEncoderEstimator
-encoder = OneHotEncoderEstimator(inputCols=["call_type"],
-                                 outputCols=["call_type_vec"])
+encoder = OneHotEncoder(inputCols=["call_type"],
+                        outputCols=["call_type_vec"])
 
 assembler = VectorAssembler(
     inputCols=["polyline_length", "call_type_vec"],
