@@ -81,8 +81,8 @@ trips_preprocessed.show()
 
 
 # Select features
-X = trips_preprocessed.select('features')
-y = trips_preprocessed.select('trip_time_sec')
+# X = trips_preprocessed.select('features')
+# y = trips_preprocessed.select('trip_time_sec')
 
 # Train-Test split
 train_data, test_data = trips_preprocessed.randomSplit([0.7, 0.3], seed=1337)
@@ -101,7 +101,7 @@ print("\n\n MODEL 1 - Linear Regression \n\n")
 
 
 # define the model
-lr = LinearRegression()
+lr = LinearRegression(featuresCol="features", labelCol="trip_time_sec")
 
 # define the grid of hyperparameters to search
 param_grid = ParamGridBuilder() \
@@ -110,7 +110,7 @@ param_grid = ParamGridBuilder() \
     .build()
 
 # define the evaluator to use
-evaluator = RegressionEvaluator(metricName="rmse", labelCol="label")
+evaluator = RegressionEvaluator(metricName="rmse", labelCol="trip_time_sec")
 
 # define the cross-validator to use
 cv = CrossValidator(estimator=lr, estimatorParamMaps=param_grid, evaluator=evaluator, numFolds=4)
@@ -133,7 +133,7 @@ r2 = evaluator.evaluate(predictions, {evaluator.metricName: "r2"})
 
 print("\n\n MODEL 2 - Random Forest \n\n")
 
-rf = RandomForestRegressor()
+rf = RandomForestRegressor(featuresCol="features", labelCol="trip_time_sec")
 
 # define the grid of hyperparameters to search
 param_grid = ParamGridBuilder() \
@@ -142,7 +142,7 @@ param_grid = ParamGridBuilder() \
     .build()
 
 # define the evaluator to use
-evaluator = RegressionEvaluator(metricName="rmse", labelCol="label")
+evaluator = RegressionEvaluator(metricName="rmse", labelCol="trip_time_sec")
 
 # define the cross-validator to use
 cv = CrossValidator(estimator=rf, estimatorParamMaps=param_grid, evaluator=evaluator, numFolds=4)
