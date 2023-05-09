@@ -72,8 +72,8 @@ assembler = VectorAssembler(
 pipeline = Pipeline(stages=[encoder, assembler])
 
 # fit and transform dataframe
-model = pipeline.fit(trips)
-trips_preprocessed = model.transform(trips)
+pipeline_model = pipeline.fit(trips)
+trips_preprocessed = pipeline_model.transform(trips)
 
 # show encoded dataframe
 trips_preprocessed.show()
