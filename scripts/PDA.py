@@ -14,8 +14,8 @@ spark = SparkSession.builder\
     .config("spark.sql.avro.compression.codec", "snappy")\
     .config("spark.jars", "file:///usr/hdp/current/hive-client/lib/hive-metastore-1.2.1000.2.6.5.0-292.jar,file:///usr/hdp/current/hive-client/lib/hive-exec-1.2.1000.2.6.5.0-292.jar")\
     .config("spark.jars.packages","org.apache.spark:spark-avro_2.12:3.0.3")\
-    .config("spark.driver.memory", "8g") \
-    .config("spark.executor.memory", "6g") \
+    .config("spark.driver.memory", "16g") \
+    .config("spark.executor.memory", "8g") \
     .enableHiveSupport()\
     .getOrCreate()
 
