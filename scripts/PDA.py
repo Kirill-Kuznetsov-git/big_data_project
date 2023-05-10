@@ -184,3 +184,7 @@ print("\t- RMSE:", rf_rmse)
 print("\t- R2:", rf_r2)
 rf_predictions.select("trip_time_sec", "prediction").show()
 
+csv_dir = 'output'
+
+lr_predictions.write.csv("%s/lr" % csv_dir)
+rf_predictions.write.csv("%s/rf" % csv_dir)
