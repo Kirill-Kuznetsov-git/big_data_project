@@ -185,10 +185,12 @@ lr_predictions.select([F.col(c).cast("string") for c in lr_predictions.columns])
 # columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features
 trips_preprocessed.write.csv("%s/pipeline_output" % csv_dir)
 
+lr_predictions = lr_predictions.select("trip_time_sec", "prediction")
 lr_predictions.select([F.col(c).cast("string") for c in lr_predictions.columns])
 # columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features,prediction
 lr_predictions.write.csv("%s/lr" % csv_dir)
 
+rf_predictions = rf_predictions.select("trip_time_sec", "prediction")
 rf_predictions.select([F.col(c).cast("string") for c in lr_predictions.columns])
 # columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features,prediction
 rf_predictions.write.csv("%s/rf" % csv_dir)
