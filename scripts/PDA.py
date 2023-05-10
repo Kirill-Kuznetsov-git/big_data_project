@@ -165,6 +165,11 @@ rf_predictions.select("trip_time_sec", "prediction").show()
 
 csv_dir = 'output'
 
+evaluation_csv = ('metic,lr,rf\nrmse,%f,%f\nr2,%f,%f' %(lr_rmse, rf_rmse, lr_r2, rf_r2))
+open("%s/evaluation.csv"%(csv_dir), "w").write(evaluation_csv)
+
+trips_preprocessed.write.csv("%s/pipeline_output" % csv_dir)
+
 lr_predictions.select([F.col(c).cast("string") for c in lr_predictions.columns])
 lr_predictions.write.csv("%s/lr" % csv_dir)
 
