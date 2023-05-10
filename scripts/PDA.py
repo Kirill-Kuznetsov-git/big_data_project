@@ -1,9 +1,12 @@
 import pyspark.sql.functions as F
 from pyspark.sql import SparkSession
-from pyspark.ml import Pipeline
 from pyspark.sql.types import IntegerType
 
-from pyspark.sql.functions import date_format, to_date, dayofweek, from_unixtime, avg, count, when, col, max, min
+from pyspark.ml import Pipeline
+from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler
+from pyspark.ml.regression import LinearRegression, RandomForestRegressor
+from pyspark.ml.evaluation import RegressionEvaluator
+from pyspark.ml.tuning import ParamGridBuilder, CrossValidator
 
 
 spark = SparkSession.builder\
@@ -22,19 +25,9 @@ spark = SparkSession.builder\
 
 sc = spark.sparkContext
 
-# print(sc)
-
-
-# print(spark.catalog.listDatabases())
-
-# print(spark.catalog.listTables("projectdb"))
-
 trips = spark.read.format("avro").table('projectdb.trips')
 trips.createOrReplaceTempView('trips')
-
-
 trips.printSchema()
-
 
 print("\n\n Process Polyline \n\n")
 
@@ -56,10 +49,6 @@ trips.show(5)
 
 print("\n\n Polyline Length and Call Type as features \n\n")
 
-from pyspark.sql.functions import col
-from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler
-from pyspark.ml.linalg import Vectors
-from pyspark.ml import Pipeline
 
 # categorical feature label indexing
 indexer = StringIndexer(inputCol="call_type", outputCol="call_type_index")
@@ -93,12 +82,6 @@ train_data, test_data = trips_preprocessed.randomSplit([0.7, 0.3], seed=1337)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # MODEL 1 - Linear Regression
 
-from pyspark.ml.regression import LinearRegression, RandomForestRegressor
-from pyspark.ml.evaluation import RegressionEvaluator
-from pyspark.ml.tuning import ParamGridBuilder, CrossValidator
-from pyspark.ml.feature import VectorAssembler
-
-
 print("\n\n MODEL 1 - Linear Regression \n\n")
 
 
@@ -124,19 +107,9 @@ cv_model = cv.fit(train_data)
 # get the best model from the cross-validator
 best_model = cv_model.bestModel
 
-# evaluate the best model on the test data
-# test_data = ...
 lr_predictions = best_model.transform(test_data)
 lr_rmse = evaluator_rmse.evaluate(lr_predictions)
 lr_r2 = evaluator_r2.evaluate(lr_predictions)
-
-# # Summarize the model over the training set and print out some metrics
-# trainingSummary = best_model.summary
-# print("numIterations: %d" % trainingSummary.totalIterations)
-# print("objectiveHistory: %s" % str(trainingSummary.objectiveHistory))
-# trainingSummary.residuals.show()
-# print("RMSE: %f" % trainingSummary.rootMeanSquaredError)
-# print("r2: %f" % trainingSummary.r2)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
