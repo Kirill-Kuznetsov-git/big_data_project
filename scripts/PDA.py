@@ -4,7 +4,7 @@ from pyspark.sql.types import IntegerType, StringType
 
 from pyspark.ml import Pipeline
 from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler
-from pyspark.ml.regression import LinearRegression, RandomForestRegressor
+from pyspark.ml.regression import LinearRegression, RandomForestRegressor, GBTRegressor
 from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.ml.tuning import ParamGridBuilder, CrossValidator
 
@@ -131,6 +131,7 @@ lr_predictions = best_model.transform(test_data)
 lr_rmse = evaluator_rmse.evaluate(lr_predictions)
 lr_r2 = evaluator_r2.evaluate(lr_predictions)
 
+best_model.save("models/LR")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # MODEL 2 - Random Forest
@@ -159,6 +160,40 @@ rf_predictions = best_model.transform(test_data)
 rf_rmse = evaluator_rmse.evaluate(rf_predictions)
 rf_r2 = evaluator_r2.evaluate(rf_predictions)
 
+best_model.save("models/RF")
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# MODEL 3 - Gradient Boosted Tree
+
+print("\n\n MODEL 3 - Gradient Boosted Tree \n\n")
+
+gbt = GBTRegressor(featuresCol="features", labelCol="trip_time_sec")
+
+# Define the hyperparameter grid for tuning
+paramGrid = ParamGridBuilder() \
+    .addGrid(gbt.maxDepth, [5, 10, 15]) \
+    .addGrid(gbt.stepSize, [0.1, 0.05, 0.01]) \
+    .build()
+
+# Define the cross-validation object
+cv = CrossValidator(estimator=pipeline, 
+                    estimatorParamMaps=paramGrid, 
+                    evaluator=evaluator_rmse, 
+                    numFolds=4)
+
+# Train the model
+cvModel = cv.fit(train_data)
+
+# Get the best model
+bestModel = cvModel.bestModel
+
+# Evaluate the best model on the test data
+gbt_predictions = bestModel.transform(test_data)
+gbt_rmse = evaluator_rmse.evaluate(gbt_predictions)
+gbt_r2 = evaluator_r2.evaluate(gbt_predictions)
+
+best_model.save("models/GBT")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # print metrics
@@ -176,19 +211,15 @@ rf_predictions.select("trip_time_sec", "prediction").show()
 
 csv_dir = 'output'
 
-evaluation_csv = ('metic,lr,rf\nrmse,%f,%f\nr2,%f,%f' %(lr_rmse, rf_rmse, lr_r2, rf_r2))
+evaluation_csv = ('metic,lr,rf,gbt\nrmse,%f,%f,%f\nr2,%f,%f,%f' %(lr_rmse, rf_rmse, gbt_rmse, lr_r2, rf_r2, gbt_r2))
 open("%s/evaluation.csv"%(csv_dir), "w").write(evaluation_csv)
-
-# lr_predictions.select([F.col(c).cast(StringType()) for c in lr_predictions.columns])
-# # columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features
-# trips_preprocessed.write.csv("%s/pipeline_output" % csv_dir)
 
 lr_predictions = lr_predictions.select("trip_time_sec", "prediction")
 lr_predictions.select([F.col(c).cast(StringType()) for c in lr_predictions.columns])
-# columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features,prediction
+# columns: trip_time_sec,prediction
 lr_predictions.write.csv("%s/lr" % csv_dir)
 
 rf_predictions = rf_predictions.select("trip_time_sec", "prediction")
 rf_predictions.select([F.col(c).cast(StringType()) for c in lr_predictions.columns])
-# columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features,prediction
+# columns: trip_time_sec,prediction
 rf_predictions.write.csv("%s/rf" % csv_dir)
