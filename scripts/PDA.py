@@ -1,6 +1,6 @@
 import pyspark.sql.functions as F
 from pyspark.sql import SparkSession
-from pyspark.sql.types import IntegerType, LongType
+from pyspark.sql.types import IntegerType, StringType
 
 from pyspark.ml import Pipeline
 from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler
@@ -179,16 +179,16 @@ csv_dir = 'output'
 evaluation_csv = ('metic,lr,rf\nrmse,%f,%f\nr2,%f,%f' %(lr_rmse, rf_rmse, lr_r2, rf_r2))
 open("%s/evaluation.csv"%(csv_dir), "w").write(evaluation_csv)
 
-lr_predictions.select([F.col(c).cast("string") for c in lr_predictions.columns])
-# columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features
-trips_preprocessed.write.csv("%s/pipeline_output" % csv_dir)
+# lr_predictions.select([F.col(c).cast(StringType()) for c in lr_predictions.columns])
+# # columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features
+# trips_preprocessed.write.csv("%s/pipeline_output" % csv_dir)
 
 lr_predictions = lr_predictions.select("trip_time_sec", "prediction")
-lr_predictions.select([F.col(c).cast("string") for c in lr_predictions.columns])
+lr_predictions.select([F.col(c).cast(StringType()) for c in lr_predictions.columns])
 # columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features,prediction
 lr_predictions.write.csv("%s/lr" % csv_dir)
 
 rf_predictions = rf_predictions.select("trip_time_sec", "prediction")
-rf_predictions.select([F.col(c).cast("string") for c in lr_predictions.columns])
+rf_predictions.select([F.col(c).cast(StringType()) for c in lr_predictions.columns])
 # columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features,prediction
 rf_predictions.write.csv("%s/rf" % csv_dir)
