@@ -1,5 +1,5 @@
 import pyspark.sql.functions as F
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, SparkContext
 from pyspark.ml import Pipeline
 from pyspark.sql.types import IntegerType
 
@@ -17,16 +17,12 @@ spark = SparkSession.builder\
     .config("spark.sql.avro.compression.codec", "snappy")\
     .config("spark.jars", "file:///usr/hdp/current/hive-client/lib/hive-metastore-1.2.1000.2.6.5.0-292.jar,file:///usr/hdp/current/hive-client/lib/hive-exec-1.2.1000.2.6.5.0-292.jar")\
     .config("spark.jars.packages","org.apache.spark:spark-avro_2.12:3.0.3")\
+    .set("spark.driver.memory", "6g") \
+    .set("spark.executor.memory", "4g") \
     .enableHiveSupport()\
     .getOrCreate()
 
-
-conf = SparkConf().setAppName("myApp") \
-                  .setMaster("local[4]") \
-                  .set("spark.driver.memory", "6g") \
-                  .set("spark.executor.memory", "3g")
-
-sc = spark.sparkContext(conf=conf)
+sc = spark.sparkContext
 
 # print(sc)
 
