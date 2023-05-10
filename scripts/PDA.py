@@ -6,6 +6,9 @@ from pyspark.sql.types import IntegerType
 from pyspark.sql.functions import date_format, to_date, dayofweek, from_unixtime, avg, count, when, col, max, min
 
 
+from pyspark import SparkConf
+
+
 spark = SparkSession.builder\
     .appName("BDT Project")\
     .master("local[*]")\
@@ -18,7 +21,12 @@ spark = SparkSession.builder\
     .getOrCreate()
 
 
-sc = spark.sparkContext
+conf = SparkConf().setAppName("myApp") \
+                  .setMaster("local[4]") \
+                  .set("spark.driver.memory", "6g") \
+                  .set("spark.executor.memory", "3g")
+
+sc = spark.sparkContext(conf=conf)
 
 # print(sc)
 
