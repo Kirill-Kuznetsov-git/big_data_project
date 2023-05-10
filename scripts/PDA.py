@@ -44,17 +44,10 @@ trips = trips.withColumn('year', F.date_format('timestamp', 'y')) \
     .withColumn('hour', F.date_format('timestamp', 'H')) \
     .withColumn('day_of_week', F.dayofweek(F.to_date('timestamp'))) 
 
-print("\n\n Process Date \n\n")
+# convert to int
+trips = trips.withColumn('hour', trips['hour'].cast(IntegerType())) \
+    .withColumn('day_of_week', trips['day_of_week'].cast(IntegerType()))
 
-# convert timestamp from bigint to timestamp
-trips = trips.withColumn('timestamp', F.from_unixtime(trips['timestamp']))
-
-# add new columns for year, month, day, hour, and day of the week
-trips = trips.withColumn('year', F.date_format('timestamp', 'y')) \
-    .withColumn('month', F.date_format('timestamp', 'M')) \
-    .withColumn('day', F.date_format('timestamp', 'd')) \
-    .withColumn('hour', F.date_format('timestamp', 'H').cast(LongType())) \
-    .withColumn('day_of_week', F.dayofweek(F.to_date('timestamp')).cast(LongType()))
 
 print("\n\n Process Polyline \n\n")
 
