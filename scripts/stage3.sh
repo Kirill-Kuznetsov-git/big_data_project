@@ -20,35 +20,32 @@ spark-submit --jars /usr/hdp/current/hive-client/lib/hive-metastore-1.2.1000.2.6
 
 # merge csv files into one
 
-echo "" > output/q1.csv
+echo "trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec" > output/q1.csv
 cat output/q1/* >> output/q1.csv
 
-echo "" > output/q2.csv
+echo "day_of_week,avg_trip_time" > output/q2.csv
 cat output/q2/* >> output/q2.csv
 
-echo "" > output/q3.csv
+echo "hour,avg_trip_time" > output/q3.csv
 cat output/q3/* >> output/q3.csv
 
-echo "" > output/q4.csv
+echo "call_type,avg_trip_time" > output/q4.csv
 cat output/q4/* >> output/q4.csv
 
-echo "" > output/q5.csv
+echo "call_type,count_trip_time" > output/q5.csv
 cat output/q5/* >> output/q5.csv
 
-echo "" > output/q6.csv
+echo "avg_trip_time,max_trip_time,min_trip_time" > output/q6.csv
 cat output/q6/* >> output/q6.csv
 
-echo "" > output/q7.csv
+echo "day_type,count" > output/q7.csv
 cat output/q7/* >> output/q7.csv
 
-echo "" > output/evaluation.csv
-cat output/evaluation/* >> output/evaluation.csv
-
-echo "" > output/pipeline_output.csv
+echo "trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features" > output/pipeline_output.csv
 cat output/pipeline_output/* >> output/pipeline_output.csv
 
-echo "" > output/lr.csv
+echo "trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features,prediction" > output/lr.csv
 cat output/lr/* >> output/lr.csv
 
-echo "" > output/rf.csv
+echo "trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features,prediction" > output/rf.csv
 cat output/rf/* >> output/rf.csv
