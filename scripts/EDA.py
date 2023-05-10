@@ -27,7 +27,7 @@ trips.createOrReplaceTempView('trips')
 
 trips.printSchema()
 
-print "\n\n Process Date \n\n"
+print("\n\n Process Date \n\n")
 
 # convert timestamp from bigint to timestamp
 trips = trips.withColumn('timestamp', from_unixtime(trips['timestamp']))
@@ -39,7 +39,7 @@ trips = trips.withColumn('year', date_format('timestamp', 'y')) \
     .withColumn('hour', date_format('timestamp', 'H')) \
     .withColumn('day_of_week', dayofweek(to_date('timestamp')))
 
-print "\n\n Process Polyline \n\n"
+print("\n\n Process Polyline \n\n")
 
 trips = trips.filter("missing_data == false")
 
@@ -59,13 +59,13 @@ trips.show(5)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # EXTRACT INSIGHTS
 
-print "\n\n Extract Insights \n\n"
+print("\n\n Extract Insights \n\n")
 
 csv_dir = 'output'
 
 missing_vals = trips.select([count(when(col(c).isNull(), c)).alias(c) for c in trips.columns])
 missing_vals.show()
-print "Missing values\n\n"
+print("Missing values\n\n")
 # columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,
 # day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec
 missing_vals.write.csv("%s/q1" % csv_dir)
@@ -73,7 +73,7 @@ missing_vals.write.csv("%s/q1" % csv_dir)
 avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time_sec').alias('avg_trip_time'))
 avg_trip_time_by_dow = avg_trip_time_by_dow.orderBy('day_of_week')
 avg_trip_time_by_dow.show()
-print "Day of week\n\n"
+print("Day of week\n\n")
 # columns: day_of_week,avg_trip_time
 avg_trip_time_by_dow.write.csv("%s/q2" % csv_dir)
 
@@ -81,7 +81,7 @@ avg_trip_time_by_dow.write.csv("%s/q2" % csv_dir)
 avg_trip_time_by_h = trips.groupBy('hour').agg(avg('trip_time_sec').alias('avg_trip_time'))
 avg_trip_time_by_h = avg_trip_time_by_h.orderBy('hour')
 avg_trip_time_by_h.show()
-print "Hours\n\n"
+print("Hours\n\n")
 # columns: hour,avg_trip_time
 avg_trip_time_by_h.write.csv("%s/q3" % csv_dir)
 
@@ -90,7 +90,7 @@ avg_trip_time_by_h.write.csv("%s/q3" % csv_dir)
 avg_trip_time_by_call_t = trips.groupBy('call_type').\
     agg(avg('trip_time_sec').alias('avg_trip_time'))
 avg_trip_time_by_call_t.show()
-print "call type (avg)\n\n"
+print("call type (avg)\n\n")
 # columns: call_type,avg_trip_time
 avg_trip_time_by_call_t.write.csv("%s/q4" % csv_dir)
 
@@ -98,7 +98,7 @@ avg_trip_time_by_call_t.write.csv("%s/q4" % csv_dir)
 count_trip_time_by_call_t = trips.groupBy('call_type').\
     agg(count('trip_time_sec').alias('count_trip_time'))
 count_trip_time_by_call_t.show()
-print "call type (count)\n\n"
+print("call type (count)\n\n")
 # columns: call_type,count_trip_time
 count_trip_time_by_call_t.write.csv("%s/q5" % csv_dir)
 
@@ -108,12 +108,12 @@ min_max_avg = trips.agg(avg('trip_time_sec').alias('avg_trip_time'),
                         F.max('trip_time_sec').alias('max_trip_time'),
                         F.min('trip_time_sec').alias('min_trip_time'))
 min_max_avg.show()
-print "avg, max, min\n\n"
+print("avg, max, min\n\n")
 # columns: avg_trip_time,max_trip_time,min_trip_time
 min_max_avg.write.csv("%s/q6" % csv_dir)
 
 day_type_count = trips.groupBy('day_type').count()
 day_type_count.show()
-print "day type count\n\n"
+print("day type count\n\n")
 # columns: day_type,count
 day_type_count.write.csv("%s/q7" % csv_dir)
