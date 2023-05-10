@@ -41,11 +41,11 @@ cat output/q6/* >> output/q6.csv
 echo "day_type,count" > output/q7.csv
 cat output/q7/* >> output/q7.csv
 
-echo "trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features" > output/pipeline_output.csv
-cat output/pipeline_output/* >> output/pipeline_output.csv
-
 echo "trip_time_sec,prediction" > output/lr.csv
 cat output/lr/* >> output/lr.csv
 
 echo "trip_time_sec,prediction" > output/rf.csv
 cat output/rf/* >> output/rf.csv
+
+echo "trip_time_sec,prediction" > output/gbt.csv
+cat output/gbt/* >> output/gbt.csv

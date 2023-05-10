@@ -223,3 +223,8 @@ rf_predictions = rf_predictions.select("trip_time_sec", "prediction")
 rf_predictions.select([F.col(c).cast(StringType()) for c in lr_predictions.columns])
 # columns: trip_time_sec,prediction
 rf_predictions.write.csv("%s/rf" % csv_dir)
+
+gbt_predictions = gbt_predictions.select("trip_time_sec", "prediction")
+gbt_predictions.select([F.col(c).cast(StringType()) for c in gbt_predictions.columns])
+# columns: trip_time_sec,prediction
+gbt_predictions.write.csv("%s/gbt" % csv_dir)
