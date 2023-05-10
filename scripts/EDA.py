@@ -105,8 +105,8 @@ count_trip_time_by_call_t.write.csv("%s/q5" % csv_dir)
 
 # assuming that `trips` is the name of the DataFrame that contains the `trip_time_sec` column
 min_max_avg = trips.agg(avg('trip_time_sec').alias('avg_trip_time'),
-                   F.max('trip_time_sec').alias('max_trip_time'),
-                   F.min('trip_time_sec').alias('min_trip_time'))
+                        F.max('trip_time_sec').alias('max_trip_time'),
+                        F.min('trip_time_sec').alias('min_trip_time'))
 min_max_avg.show()
 print "avg, max, min\n\n"
 # columns: avg_trip_time,max_trip_time,min_trip_time
