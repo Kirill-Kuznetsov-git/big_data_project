@@ -54,7 +54,7 @@ trips = trips.withColumn('year', F.date_format('timestamp', 'y')) \
     .withColumn('month', F.date_format('timestamp', 'M')) \
     .withColumn('day', F.date_format('timestamp', 'd')) \
     .withColumn('hour', F.date_format('timestamp', 'H').cast(LongType())) \
-    .withColumn('day_of_week', F.dayofweek(F.to_date('timestamp'))).cast(LongType())
+    .withColumn('day_of_week', F.dayofweek(F.to_date('timestamp')).cast(LongType()))
 
 print("\n\n Process Polyline \n\n")
 
