@@ -1,12 +1,9 @@
 import pyspark.sql.functions as F
-from pyspark.sql import SparkSession, SparkContext
+from pyspark.sql import SparkSession
 from pyspark.ml import Pipeline
 from pyspark.sql.types import IntegerType
 
 from pyspark.sql.functions import date_format, to_date, dayofweek, from_unixtime, avg, count, when, col, max, min
-
-
-from pyspark import SparkConf
 
 
 spark = SparkSession.builder\
@@ -21,6 +18,7 @@ spark = SparkSession.builder\
     .config("spark.executor.memory", "4g") \
     .enableHiveSupport()\
     .getOrCreate()
+
 
 sc = spark.sparkContext
 
