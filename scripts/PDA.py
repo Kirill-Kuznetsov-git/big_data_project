@@ -109,11 +109,12 @@ param_grid = ParamGridBuilder() \
     .addGrid(lr.elasticNetParam, [0.0, 0.5, 1.0]) \
     .build()
 
-# define the evaluator to use
-evaluator = RegressionEvaluator(metricName="rmse", labelCol="trip_time_sec")
+# # define the evaluator to use
+evaluator_rmse = RegressionEvaluator(metricName="rmse", labelCol="trip_time_sec")
+evaluator_r2 = RegressionEvaluator(metricName="r2", labelCol="trip_time_sec")
 
 # define the cross-validator to use
-cv = CrossValidator(estimator=lr, estimatorParamMaps=param_grid, evaluator=evaluator, numFolds=4)
+cv = CrossValidator(estimator=lr, estimatorParamMaps=param_grid, evaluator=evaluator_rmse, numFolds=4)
 
 # fit the model using the cross-validator
 cv_model = cv.fit(train_data)
@@ -123,9 +124,17 @@ best_model = cv_model.bestModel
 
 # evaluate the best model on the test data
 # test_data = ...
-predictions = best_model.transform(test_data)
-rmse = evaluator.evaluate(predictions)
-r2 = evaluator.evaluate(predictions, {evaluator.metricName: "r2"})
+lr_predictions = best_model.transform(test_data)
+lr_rmse = evaluator_rmse.evaluate(lr_predictions)
+lr_r2 = evaluator_r2.evaluate(lr_predictions)
+
+# # Summarize the model over the training set and print out some metrics
+# trainingSummary = best_model.summary
+# print("numIterations: %d" % trainingSummary.totalIterations)
+# print("objectiveHistory: %s" % str(trainingSummary.objectiveHistory))
+# trainingSummary.residuals.show()
+# print("RMSE: %f" % trainingSummary.rootMeanSquaredError)
+# print("r2: %f" % trainingSummary.r2)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,10 +151,10 @@ param_grid = ParamGridBuilder() \
     .build()
 
 # define the evaluator to use
-evaluator = RegressionEvaluator(metricName="rmse", labelCol="trip_time_sec")
+# evaluator = RegressionEvaluator(metricName="rmse", labelCol="trip_time_sec")
 
 # define the cross-validator to use
-cv = CrossValidator(estimator=rf, estimatorParamMaps=param_grid, evaluator=evaluator, numFolds=4)
+cv = CrossValidator(estimator=rf, estimatorParamMaps=param_grid, evaluator=evaluator_rmse, numFolds=4)
 
 # fit the model using the cross-validator
 cv_model = cv.fit(train_data)
@@ -155,6 +164,21 @@ best_model = cv_model.bestModel
 
 # evaluate the best model on the test data
 # test_data = ...
-predictions = best_model.transform(test_data)
-rmse = evaluator.evaluate(predictions)
-r2 = evaluator.evaluate(predictions, {evaluator.metricName: "r2"})
+rf_predictions = best_model.transform(test_data)
+rf_rmse = evaluator_rmse.evaluate(rf_predictions)
+rf_r2 = evaluator_r2.evaluate(rf_predictions)
+
+
+# print metrics
+
+print("METRICS:")
+print("Linear Regression:")
+print("\t- RMSE:", lr_rmse)
+print("\t- R2:", lr_r2)
+lr_predictions.select("trip_time_sec", "prediction").show()
+
+print("Random Forest:")
+print("\t- RMSE:", rf_rmse)
+print("\t- R2:", rf_r2)
+rf_predictions.select("trip_time_sec", "prediction").show()
+
