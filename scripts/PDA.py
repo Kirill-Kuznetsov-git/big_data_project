@@ -47,11 +47,11 @@ print("\n\n Process Date \n\n")
 trips = trips.withColumn('timestamp', F.from_unixtime(trips['timestamp']))
 
 # add new columns for year, month, day, hour, and day of the week
-trips = trips.withColumn('year', F.date_format('timestamp', 'y')) \
-    .withColumn('month', F.date_format('timestamp', 'M')) \
-    .withColumn('day', F.date_format('timestamp', 'd')) \
-    .withColumn('hour', F.date_format('timestamp', 'H')) \
-    .withColumn('day_of_week', F.dayofweek(F.to_date('timestamp'))) 
+trips = trips.withColumn('year', F.date_format('timestamp', 'y').cast(IntegerType())) \
+    .withColumn('month', F.date_format('timestamp', 'M').cast(IntegerType())) \
+    .withColumn('day', F.date_format('timestamp', 'd').cast(IntegerType())) \
+    .withColumn('hour', F.date_format('timestamp', 'H').cast(IntegerType())) \
+    .withColumn('day_of_week', F.dayofweek(F.to_date('timestamp')).cast(IntegerType()))
 
 print("\n\n Process Polyline \n\n")
 
