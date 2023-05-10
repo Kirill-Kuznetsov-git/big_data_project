@@ -92,9 +92,11 @@ trips_preprocessed = pipeline_model.transform(trips)
 # show encoded dataframe
 trips_preprocessed.show()
 
+# select only relevant columns for model
+trips_data = trips_preprocessed.select("features", "trip_time_sec")
 
 # Train-Test split
-train_data, test_data = trips_preprocessed.randomSplit([0.7, 0.3], seed=1337)
+train_data, test_data = trips_data.randomSplit([0.7, 0.3], seed=1337)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
