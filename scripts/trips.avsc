@@ -1,0 +1,61 @@
+{
+  "type" : "record",
+  "name" : "trips",
+  "doc" : "Sqoop import of trips",
+  "fields" : [ {
+    "name" : "trip_id",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "trip_id",
+    "sqlType" : "12"
+  }, {
+    "name" : "call_type",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "call_type",
+    "sqlType" : "12"
+  }, {
+    "name" : "origin_call",
+    "type" : [ "null", "double" ],
+    "default" : null,
+    "columnName" : "origin_call",
+    "sqlType" : "8"
+  }, {
+    "name" : "origin_stand",
+    "type" : [ "null", "double" ],
+    "default" : null,
+    "columnName" : "origin_stand",
+    "sqlType" : "8"
+  }, {
+    "name" : "taxi_id",
+    "type" : [ "null", "int" ],
+    "default" : null,
+    "columnName" : "taxi_id",
+    "sqlType" : "4"
+  }, {
+    "name" : "timestamp",
+    "type" : [ "null", "long" ],
+    "default" : null,
+    "columnName" : "timestamp",
+    "sqlType" : "-5"
+  }, {
+    "name" : "day_type",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "day_type",
+    "sqlType" : "12"
+  }, {
+    "name" : "missing_data",
+    "type" : [ "null", "boolean" ],
+    "default" : null,
+    "columnName" : "missing_data",
+    "sqlType" : "-7"
+  }, {
+    "name" : "polyline",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "polyline",
+    "sqlType" : "12"
+  } ],
+  "tableName" : "trips"
+}
