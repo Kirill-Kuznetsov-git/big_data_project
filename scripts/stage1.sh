@@ -18,6 +18,8 @@ psql -d project -U postgres -f sql/load_csv.sql
 
 echo "Data from csv loaded successfully."
 
+hdfs dfs -rm -r /project
+
 sqoop import-all-tables -Dmapreduce.job.user.classpath.first=true \
  -Dorg.apache.sqoop.splitter.allow_text_splitter=true \
  --connect jdbc:postgresql://localhost/project \
