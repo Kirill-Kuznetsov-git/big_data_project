@@ -66,6 +66,8 @@ trips = trips.withColumn('trip_time_sec', trip_time_sec_udf(trips['POLYLINE']))
 
 # drop where trip time in sec is zero
 trips = trips.where(trips.trip_time_sec != 0)
+# drop where null in hours or day of week
+trips = trips.na.drop(subset=["hour","day_of_week"])
 
 # Show the first few rows of the DataFrame
 trips.show(5)
