@@ -212,7 +212,8 @@ rf_predictions.select("trip_time_sec", "prediction").show()
 csv_dir = 'output'
 
 evaluation_csv = ('metic,lr,rf,gbt\nrmse,%f,%f,%f\nr2,%f,%f,%f' %(lr_rmse, rf_rmse, gbt_rmse, lr_r2, rf_r2, gbt_r2))
-open("%s/evaluation.csv"%(csv_dir), "w").write(evaluation_csv)
+with open("%s/evaluation.csv"%(csv_dir), "w") as file:
+    file.write(evaluation_csv)
 
 lr_predictions = lr_predictions.select("trip_time_sec", "prediction")
 lr_predictions.select([F.col(c).cast(StringType()) for c in lr_predictions.columns])
