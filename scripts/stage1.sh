@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1xlhxseaFSlpI6MTfa7ks91CG3RKrzmUQ' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1xlhxseaFSlpI6MTfa7ks91CG3RKrzmUQ" -O data/trips.tsv && rm -rf /tmp/cookies.txt
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1xlhxseaFSlpI6MTfa7ks91CG3RKrzmUQ' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1xlhxseaFSlpI6MTfa7ks91CG3RKrzmUQ" -O data/trips.tsv && rm -rf /tmp/cookies.txt
 
 wget https://jdbc.postgresql.org/download/postgresql-42.6.0.jar --no-check-certificate
 

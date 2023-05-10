@@ -41,6 +41,17 @@ trips = trips.withColumn('year', F.date_format('timestamp', 'y')) \
     .withColumn('hour', F.date_format('timestamp', 'H')) \
     .withColumn('day_of_week', F.dayofweek(F.to_date('timestamp'))) 
 
+print("\n\n Process Date \n\n")
+
+# convert timestamp from bigint to timestamp
+trips = trips.withColumn('timestamp', F.from_unixtime(trips['timestamp']))
+
+# add new columns for year, month, day, hour, and day of the week
+trips = trips.withColumn('year', F.date_format('timestamp', 'y')) \
+    .withColumn('month', F.date_format('timestamp', 'M')) \
+    .withColumn('day', F.date_format('timestamp', 'd')) \
+    .withColumn('hour', F.date_format('timestamp', 'H')) \
+    .withColumn('day_of_week', F.dayofweek(F.to_date('timestamp'))) 
 
 print("\n\n Process Polyline \n\n")
 
@@ -168,10 +179,14 @@ csv_dir = 'output'
 evaluation_csv = ('metic,lr,rf\nrmse,%f,%f\nr2,%f,%f' %(lr_rmse, rf_rmse, lr_r2, rf_r2))
 open("%s/evaluation.csv"%(csv_dir), "w").write(evaluation_csv)
 
+lr_predictions.select([F.col(c).cast("string") for c in lr_predictions.columns])
+# columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features
 trips_preprocessed.write.csv("%s/pipeline_output" % csv_dir)
 
 lr_predictions.select([F.col(c).cast("string") for c in lr_predictions.columns])
+# columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features,prediction
 lr_predictions.write.csv("%s/lr" % csv_dir)
 
 rf_predictions.select([F.col(c).cast("string") for c in lr_predictions.columns])
+# columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec,call_type_index,call_type_vec,features,prediction
 rf_predictions.write.csv("%s/rf" % csv_dir)
