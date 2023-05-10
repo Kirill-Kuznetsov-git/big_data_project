@@ -29,6 +29,19 @@ trips = spark.read.format("avro").table('projectdb.trips')
 trips.createOrReplaceTempView('trips')
 trips.printSchema()
 
+print("\n\n Process Date \n\n")
+
+# convert timestamp from bigint to timestamp
+trips = trips.withColumn('timestamp', F.from_unixtime(trips['timestamp']))
+
+# add new columns for year, month, day, hour, and day of the week
+trips = trips.withColumn('year', F.date_format('timestamp', 'y')) \
+    .withColumn('month', F.date_format('timestamp', 'M')) \
+    .withColumn('day', F.date_format('timestamp', 'd')) \
+    .withColumn('hour', F.date_format('timestamp', 'H')) \
+    .withColumn('day_of_week', F.dayofweek(F.to_date('timestamp'))) 
+
+
 print("\n\n Process Polyline \n\n")
 
 trips = trips.filter("missing_data == false")
@@ -58,7 +71,7 @@ encoder = OneHotEncoder(inputCols=["call_type_index"],
                         outputCols=["call_type_vec"])
 
 assembler = VectorAssembler(
-    inputCols=["polyline_length", "call_type_vec"],
+    inputCols=["polyline_length", "hour", "day_of_week", "call_type_vec"],
     outputCol="features")
 
 pipeline = Pipeline(stages=[indexer, encoder, assembler])
@@ -70,10 +83,6 @@ trips_preprocessed = pipeline_model.transform(trips)
 # show encoded dataframe
 trips_preprocessed.show()
 
-
-# Select features
-# X = trips_preprocessed.select('features')
-# y = trips_preprocessed.select('trip_time_sec')
 
 # Train-Test split
 train_data, test_data = trips_preprocessed.randomSplit([0.7, 0.3], seed=1337)
@@ -125,9 +134,6 @@ param_grid = ParamGridBuilder() \
     .addGrid(rf.numTrees, [10, 50, 100]) \
     .build()
 
-# define the evaluator to use
-# evaluator = RegressionEvaluator(metricName="rmse", labelCol="trip_time_sec")
-
 # define the cross-validator to use
 cv = CrossValidator(estimator=rf, estimatorParamMaps=param_grid, evaluator=evaluator_rmse, numFolds=4)
 
@@ -138,12 +144,12 @@ cv_model = cv.fit(train_data)
 best_model = cv_model.bestModel
 
 # evaluate the best model on the test data
-# test_data = ...
 rf_predictions = best_model.transform(test_data)
 rf_rmse = evaluator_rmse.evaluate(rf_predictions)
 rf_r2 = evaluator_r2.evaluate(rf_predictions)
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # print metrics
 
 print("METRICS:")
@@ -159,5 +165,8 @@ rf_predictions.select("trip_time_sec", "prediction").show()
 
 csv_dir = 'output'
 
+lr_predictions.select([F.col(c).cast("string") for c in lr_predictions.columns])
 lr_predictions.write.csv("%s/lr" % csv_dir)
+
+rf_predictions.select([F.col(c).cast("string") for c in lr_predictions.columns])
 rf_predictions.write.csv("%s/rf" % csv_dir)

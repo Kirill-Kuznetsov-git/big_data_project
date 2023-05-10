@@ -1,6 +1,5 @@
 import pyspark.sql.functions as F
 from pyspark.sql import SparkSession
-from pyspark.ml import Pipeline
 from pyspark.sql.types import IntegerType
 
 from pyspark.sql.functions import date_format, to_date, dayofweek, from_unixtime, avg, count, when, col, max, min
@@ -20,16 +19,8 @@ spark = SparkSession.builder\
 
 sc = spark.sparkContext
 
-# print(sc)
-
-
-# print(spark.catalog.listDatabases())
-
-# print(spark.catalog.listTables("projectdb"))
-
 trips = spark.read.format("avro").table('projectdb.trips')
 trips.createOrReplaceTempView('trips')
-
 
 trips.printSchema()
 
@@ -44,7 +35,6 @@ trips = trips.withColumn('year', date_format('timestamp', 'y')) \
     .withColumn('day', date_format('timestamp', 'd')) \
     .withColumn('hour', date_format('timestamp', 'H')) \
     .withColumn('day_of_week', dayofweek(to_date('timestamp'))) 
-
 
 
 print("\n\n Process Polyline \n\n")
@@ -64,6 +54,7 @@ trips = trips.where(trips.trip_time_sec != 0)
 # Show the first few rows of the DataFrame
 trips.show(5)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # EXTRACT INSIGHTS
 
 print("\n\n Extract Insights \n\n")
