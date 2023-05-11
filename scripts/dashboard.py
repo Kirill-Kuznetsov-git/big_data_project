@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 
 trips = pd.read_csv("data/trips.tsv", sep="\t")
-trips_prproc = pd.read_csv("output/trips_preprocessed.tsv", sep="\t")
+trips_prproc = pd.read_csv("output/trips_preprocessed.csv")
 
 # q1 = pd.read_csv("output/q1.csv")
 # q2 = pd.read_csv("output/q2.csv")
