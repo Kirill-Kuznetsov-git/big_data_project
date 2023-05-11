@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 
 trips = pd.read_csv("data/trips.tsv", sep="\t")
-# trips_prproc = pd.read_csv("output/trips_preprocessed.tsv", sep="\t")
+trips_prproc = pd.read_csv("output/trips_preprocessed.tsv", sep="\t")
 
 # q1 = pd.read_csv("output/q1.csv")
 # q2 = pd.read_csv("output/q2.csv")
@@ -29,10 +29,10 @@ st.write(trip_description)
 
 
 # hour by call type by trip time sec
-# import altair as alt
-# c = alt.Chart(trips_prproc).mark_circle().encode(
-#     x='hour', y='call_type', size='trip_time_sec', color='sal', tooltip=['ename', 'deptno', 'trip_time_sec'])
-# st.write(c)
+import altair as alt
+c = alt.Chart(trips_prproc).mark_circle().encode(
+    x='hour', y='call_type', size='trip_time_sec', color='sal', tooltip=['ename', 'deptno', 'trip_time_sec'])
+st.write(c)
 
 
 
