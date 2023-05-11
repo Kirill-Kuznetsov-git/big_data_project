@@ -1,6 +1,6 @@
 from pyspark.sql import functions as F
 from pyspark.sql import SparkSession
-from pyspark.sql.types import IntegerType
+from pyspark.sql.types import IntegerType, LongType
 
 from pyspark.sql.functions import date_format, to_date, dayofweek,\
     from_unixtime, avg, count, when, col
@@ -59,15 +59,21 @@ print "\n\n Extract Insights \n\n"
 
 csv_dir = 'output'
 
-# "Data Size: The total number of records or rows in the dataset"
-data_size_csv = ('data_size,\n%f' % (trips.count()))
-with open("%s/data_size.csv"%(csv_dir), "w") as file:
-    file.write(data_size_csv)
 
-# Data Distribution: The distribution of data across different categories or variables.
-data_size_csv = ('trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,trip_time_sec\nLongType,StringType,DoubleType,DoubleType,IntegerType,LongType,StringType,BooleanType,StringType,IntegerType')
-with open("%s/data_size.csv"%(csv_dir), "w") as file:
-    file.write(data_size_csv)
+# We can get these in dashboard step
+
+# # "Data Size: The total number of records or rows in the dataset"
+# data_size_csv = ('data_size,\n%f' % (trips.count()))
+# with open("%s/data_size.csv"%(csv_dir), "w") as file:
+#     file.write(data_size_csv)
+
+# # Data Distribution: The distribution of data across different categories or variables.
+# data_size_csv = ('trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,trip_time_sec\nLongType,StringType,DoubleType,DoubleType,IntegerType,LongType,StringType,BooleanType,StringType,IntegerType')
+# with open("%s/data_type.csv"%(csv_dir), "w") as file:
+#     file.write(data_size_csv)
+
+trips = trips.withColumn('timestamp', trips['timestamp'].cast(LongType()))
+trips.write.csv("%s/trips_preprocessed" % csv_dir)
 
 
 
