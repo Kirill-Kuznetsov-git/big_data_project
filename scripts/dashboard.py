@@ -29,7 +29,7 @@ st.write("")
 st.write("Here we show the dependence of trip time in seconds, call type and hour of start of trip.")
 import altair as alt
 c = alt.Chart(trips_prproc).mark_circle().encode(
-    x='hour', y='call_type', size='trip_time_sec', color='trip_time_sec', tooltip=['hour', 'call_type', 'trip_time_sec'])
+    x='hour', y='call_type', size='trip_time_sec', color='trip_time_sec', tooltip=['hour', 'call_type', 'trip_time_sec']).properties(height=300, width=500)
 st.write(c)
 
 # ---------
@@ -110,7 +110,7 @@ st.write(chart_q7)
 
 # model 1 - lr
 
-# Linear regression predicts the data perfectly. This could mean that the label is linearly dependant on the features 
+# Linear regression predicts the data perfectly. This could mean that the label is linearly dependent on the features
 
 # cart with 20 columns
 
