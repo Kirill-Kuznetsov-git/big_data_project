@@ -211,12 +211,10 @@ def run_gbt(train_data, test_data):
     gbt_r2 = evaluator_r2.evaluate(gbt_predictions)
 
     bestModel.save("models/GBT")
-    
     return gbt_predictions, gbt_rmse, gbt_r2
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# run models   
-
+# run models
 lr_predictions, lr_rmse, lr_r2 = run_lr(test_data, train_data)
 rf_predictions, rf_rmse, rf_r2 = run_rf(test_data, train_data)
 # gbt_predictions, gbt_rmse, gbt_r2 = run_gbt(test_data, train_data)
