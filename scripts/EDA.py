@@ -26,6 +26,9 @@ trips.printSchema()
 
 print "\n\n Process Date \n\n"
 
+x = trips.select([count(when(col(c).isNull(), c)).alias(c) for c in trips.columns])
+x.show()
+
 # convert timestamp from bigint to timestamp
 trips = trips.withColumn('timestamp', from_unixtime(trips['timestamp']))
 
