@@ -73,8 +73,7 @@ csv_dir = 'output'
 #     file.write(data_size_csv)
 
 trips = trips.withColumn('timestamp', trips['timestamp'].cast(LongType()))
-trips.write.csv("%s/trips_preprocessed" % csv_dir)
-
+trips.sample(fraction=0.01, seed=1337).write.csv("%s/trips_preprocessed" % csv_dir)
 
 
 missing_vals = trips.select([count(when(col(c).isNull(), c)).alias(c) for c in trips.columns])
