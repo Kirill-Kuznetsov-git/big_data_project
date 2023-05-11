@@ -46,7 +46,7 @@ chart = chart.mark_point().encode(
 chart = chart.encode(color='call type:N')
 
 # Show the chart
-chart.show()
+st.write(chart)
 
 # q1 - Missing values
 
