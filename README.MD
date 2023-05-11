@@ -1,4 +1,9 @@
-This repository is a template for the final project of big data course in IU-2023. It contains the following directories:
+In this repository we try to predict taxi trip time in seconds based on geographical and other data
+
+```sh
+# link to dataset
+$ wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1xlhxseaFSlpI6MTfa7ks91CG3RKrzmUQ' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1xlhxseaFSlpI6MTfa7ks91CG3RKrzmUQ" -O data/trips.tsv && rm -rf /tmp/cookies.txt
+```
 
 - `data/` contains the dataset files.
 - `models/` contains the Spark ML models.

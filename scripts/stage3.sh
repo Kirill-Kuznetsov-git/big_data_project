@@ -3,7 +3,7 @@
 rm -rf output/evaluation*
 rm -rf output/lr*
 rm -rf output/rf*
-rm -rf output/gbt*
+# rm -rf output/gbt*
 
 rm -rf models/*
 
@@ -18,6 +18,6 @@ cat output/lr/* >> output/lr.csv
 echo "trip_time_sec,prediction" > output/rf.csv
 cat output/rf/* >> output/rf.csv
 
-echo "trip_time_sec,prediction" > output/gbt.csv
-cat output/gbt/* >> output/gbt.csv
+# echo "trip_time_sec,prediction" > output/gbt.csv
+# cat output/gbt/* >> output/gbt.csv
 

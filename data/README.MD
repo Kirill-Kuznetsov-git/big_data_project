@@ -24,3 +24,5 @@ Each data sample corresponds to one completed trip. It contains a total of
 - MISSING_DATA: (Boolean) It is FALSE when the GPS data stream is complete and TRUE whenever one (or more) locations are missing
 
 - POLYLINE: (String): It contains a list of GPS coordinates (i.e. WGS84 format) mapped as a string. The beginning and the end of the string are identified with brackets (i.e. [ and ], respectively). Each pair of coordinates is also identified by the same brackets as [LONGITUDE, LATITUDE]. This list contains one pair of coordinates for each 15 seconds of trip. The last list item corresponds to the trip’s destination while the first one represents its start;
+
+- TRIP_TIME_SEC: (integer): It contains the time (in seconds) it take to reach from original position to the final destination.
