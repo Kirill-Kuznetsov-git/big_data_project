@@ -2,7 +2,7 @@ import streamlit as st
 
 import pandas as pd
 
-trips = pd.read_csv("data/trips.tsv", sep="\t")
+# trips = pd.read_csv("data/trips.tsv", sep="\t")
 trips_prproc = pd.read_csv("output/trips_preprocessed.csv")
 
 # q1 = pd.read_csv("output/q1.csv")
@@ -23,9 +23,9 @@ trips_prproc = pd.read_csv("output/trips_preprocessed.csv")
 st.write("# Big Data Project  \n _Employee Salary_$^{Prediction}$ :sunglasses:  \n", "*Year*: **2023**")
 
 
-# Display the descriptive information of the dataframe
-trip_description = trips.describe()
-st.write(trip_description)
+# # Display the descriptive information of the dataframe
+# trip_description = trips.describe()
+# st.write(trip_description)
 
 
 # hour by call type by trip time sec
@@ -38,10 +38,14 @@ st.write(c)
 
 # q1 - Missing values
 
+# Here we can see that origin_ and origin_ have too many missing data. This tells us that we cannot rely on these tables for our predictions
+
 # trip_description = trips.describe()
 # st.write(trip_description)
 
 # q2 - Day of week
+
+# 
 
 # q3 - Hours
 
@@ -57,7 +61,6 @@ st.write(c)
 
 # model 2 - rf
 
-# model 3 - gbt
 
 # evaluations
 
