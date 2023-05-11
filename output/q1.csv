@@ -1,2 +1,2 @@
-trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec
+trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,trip_time_sec,year,month,day,hour,day_of_week,polyline_length
 0,0,1335546,896034,0,1699594,0,0,0,0,0,0,0,0,0,0
