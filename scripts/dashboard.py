@@ -48,12 +48,11 @@ st.write(c)
 # q2 - Day of week
 
 # countplot / horizontal
-chart = alt.Chart(q2)
-chart = chart.mark_bar()
-chart = chart.encode(
-    y=alt.Y('day_of_week:N', sort='-x'),
-    x=alt.X('trip_time_sec:Q')
-)
+chart = alt.Chart(q2).mark_bar().encode(
+    alt.X("day_of_week:Q").title("Day of week"),
+    alt.Y("trip_time_sec:O").title("Trip time in seconds"),
+).properties(height=alt.Step(20))
+
 st.write(chart)
 
 # Fifth day of the week has the most number of taxi trips by total time. This higher demand may be correlated with increased traffic that day which can increase the trip duration
