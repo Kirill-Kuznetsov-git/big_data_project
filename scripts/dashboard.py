@@ -40,7 +40,6 @@ st.write(c)
 st.write("Here we can see the number of missing values for each column."
           " ORIGIN_CALL and ORIGIN_STAND have too many missing data."
           " This tells us that we cannot rely on these tables for our predictions")
-q1 = q1.describe()
 st.write(q1)
 
 # ---------
