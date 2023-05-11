@@ -30,23 +30,11 @@ st.write("# Big Data Project  \n _Employee Salary_$^{Prediction}$ :sunglasses:  
 
 # hour by call type by trip time sec
 import altair as alt
-# c = alt.Chart(trips_prproc).mark_circle().encode(
-#     x='hour', y='call_type', size='trip_time_sec', color='trip_time_sec', tooltip=['hour', 'call_type', 'trip_time_sec'])
-# st.write(c)
-# 3. Use Altair to create a chart with alt.Chart() and specify the data source
-chart = alt.Chart(trips_prproc)
+c = alt.Chart(trips_prproc).mark_circle().encode(
+    x='hour', y='trip_time_sec', size='call_type', color='call_type', tooltip=['hour', 'trip_time_sec', 'call_type'])
+st.write(c)
 
-# 4. Set the encoding for the x-axis (time of day) and y-axis (trip time sec)
-chart = chart.mark_point().encode(
-    x='time of day:T',
-    y='trip time sec:Q',
-)
 
-# 5. Use the color encoding to differentiate between the call types
-chart = chart.encode(color='call type:N')
-
-# Show the chart
-st.write(chart)
 
 # q1 - Missing values
 
