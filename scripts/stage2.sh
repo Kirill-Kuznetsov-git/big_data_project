@@ -3,6 +3,7 @@
 hive -f sql/db.hql
 
 
+rm -rf output/trips_preprocessed*
 rm -rf output/q1*
 rm -rf output/q2*
 rm -rf output/q3*
