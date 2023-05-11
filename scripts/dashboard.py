@@ -38,7 +38,7 @@ chart = alt.Chart(trips_prproc).mark_point().encode(
     y='call_type',
     z='trip_time_sec'
 )
-
+st.write(chart)
 
 # q1 - Missing values
 
