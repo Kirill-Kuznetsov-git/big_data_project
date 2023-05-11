@@ -28,10 +28,12 @@ st.write(trip_description)
 
 # hour by call type by trip time sec
 st.write("## Hour of day of start trip and Call type and Trip time sec")
-st.write("Here we show the dependence of trip time in seconds, call type and hour of start of trip:")
+st.write("Here we show the dependence of trip time"
+         " in seconds, call type and hour of start of trip:")
 import altair as alt
 c = alt.Chart(trips_prproc).mark_circle().encode(
-    x='hour', y='call_type', size='trip_time_sec', color='trip_time_sec', tooltip=['hour', 'call_type', 'trip_time_sec']).properties(height=300, width=500)
+    x='hour', y='call_type', size='trip_time_sec', color='trip_time_sec',
+    tooltip=['hour', 'call_type', 'trip_time_sec']).properties(height=300, width=500)
 st.write(c)
 
 # ---------
@@ -60,7 +62,8 @@ chart_q2 = alt.Chart(q2).mark_bar().encode(
 st.write(chart_q2)
 
 st.write("Fifth day of the week has the most number of taxi trips by total time."
-         " This higher demand may be correlated with increased traffic that day which can increase the trip duration.")
+         " This higher demand may be correlated with "
+         "increased traffic that day which can increase the trip duration.")
 
 # ---------
 
@@ -78,7 +81,8 @@ chart_q3 = alt.Chart(q3).mark_bar().encode(
 st.write(chart_q3)
 st.write("We can see that the peak hours for taxi are the most busy hours of the day "
          "- when people go to work and when people return from work. "
-         "This could mean that the city is experiencing higher traffic which leads to longer trip time.")
+         "This could mean that the city is "
+         "experiencing higher traffic which leads to longer trip time.")
 
 # ---------
 
@@ -136,7 +140,8 @@ st.write(rf)
 
 # evaluations
 st.write("## Final evaluation")
-st.write("Final metric's evaluation for random forent tree and linear regression and comparing of these two methods:")
+st.write("Final metric's evaluation for random forent tree"
+         " and linear regression and comparing of these two methods:")
 evals = evals.drop(columns=['gbt'])
 st.write(evals)
 
@@ -146,13 +151,15 @@ st.write(evals)
 st.write("# Results")
 st.write("We make all stages: move data PG->HDFS->HIVE, then extract 6-th insights from"
          "features for next step prediction. From this insights we got that only some "
-         "of the features are useful and only call type, day of week of trip start, hour of trip start and polyline"
-         "length are impactful for prediction. We analyzed a dataset and found that one of its labels had"
-         " a linear correlation with some of its features. To predict this label, we used two algorithms:"
-         " Linear Regression and Random Forest Regression. Our results showed that Linear Regression performed"
-         " better with an R2 score of 1 and an RMSE of 1.7, indicating that this algorithm can accurately predict"
-         " the label using linear equations. In contrast, Random Forest Regression had an R2 score of 0.6 and an"
-         " RMSE of 436.3, showing that this algorithm is less accurate for this dataset and may not be the best choice"
-         " for predicting the label. Overall, our findings suggest that Linear Regression is a more suitable algorithm"
-         " for predicting the label in this dataset.")
+         "of the features are useful and only call type, day of week of trip start, hour of trip"
+         " start and polyline length are impactful for prediction. We analyzed a dataset and found"
+         " that one of its labels had a linear correlation with some of its features. To predict"
+         " this label, we used two algorithms: Linear Regression and Random Forest Regression."
+         " Our results showed that Linear Regression performed better with an R2 score of 1 and"
+         " an RMSE of 1.7, indicating that this algorithm can accurately predict the label using"
+         " linear equations. In contrast, Random Forest Regression had an R2 score of 0.6 and an"
+         " RMSE of 436.3, showing that this algorithm is less accurate for this dataset and may"
+         " not be the best choice for predicting the label. Overall, our findings suggest that"
+         " Linear Regression is a more suitable algorithm for predicting"
+         " the label in this dataset.")
 # ---------

@@ -15,8 +15,10 @@ spark = SparkSession.builder\
     .config("hive.metastore.uris", "thrift://sandbox-hdp.hortonworks.com:9083")\
     .config("spark.sql.catalogImplementation","hive")\
     .config("spark.sql.avro.compression.codec", "snappy")\
-    .config("spark.jars", "file:///usr/hdp/current/hive-client/lib/hive-metastore-1.2.1000.2.6.5.0-292.jar,file:///usr/hdp/current/hive-client/lib/hive-exec-1.2.1000.2.6.5.0-292.jar")\
-    .config("spark.jars.packages","org.apache.spark:spark-avro_2.12:3.0.3")\
+    .config("spark.jars", "file:///usr/hdp/current/hive-client/lib/"
+                          "hive-metastore-1.2.1000.2.6.5.0-292.jar,file:///"
+                          "usr/hdp/current/hive-client/lib/hive-exec-1.2.1000.2.6.5.0-292.jar")\
+    .config("spark.jars.packages", "org.apache.spark:spark-avro_2.12:3.0.3")\
     .config("spark.driver.memory", "32g") \
     .config("spark.executor.memory", "32g") \
     .enableHiveSupport()\
@@ -119,7 +121,8 @@ def run_lr(train_data, test_data):
     evaluator_r2 = RegressionEvaluator(metricName="r2", labelCol="trip_time_sec")
 
     # define the cross-validator to use
-    cv = CrossValidator(estimator=lr, estimatorParamMaps=param_grid, evaluator=evaluator_rmse, numFolds=4)
+    cv = CrossValidator(estimator=lr, estimatorParamMaps=param_grid,
+                        evaluator=evaluator_rmse, numFolds=4)
 
     # fit the model using the cross-validator
     cv_model = cv.fit(train_data)
@@ -155,7 +158,8 @@ def run_rf(train_data, test_data):
 
 
     # define the cross-validator to use
-    cv = CrossValidator(estimator=rf, estimatorParamMaps=param_grid, evaluator=evaluator_rmse, numFolds=4)
+    cv = CrossValidator(estimator=rf, estimatorParamMaps=param_grid,
+                        evaluator=evaluator_rmse, numFolds=4)
 
     # fit the model using the cross-validator
     cv_model = cv.fit(train_data)
@@ -238,7 +242,8 @@ rf_predictions.select("trip_time_sec", "prediction").show()
 
 csv_dir = 'output'
 
-evaluation_csv = ('metic,lr,rf,gbt\nrmse,%f,%f,%f\nr2,%f,%f,%f' %(lr_rmse, rf_rmse, 0, lr_r2, rf_r2, 0))
+evaluation_csv = ('metic,lr,rf,gbt\nrmse,%f,%f,%f\nr2,%f,%f,%f'
+                  %(lr_rmse, rf_rmse, 0, lr_r2, rf_r2, 0))
 with open("%s/evaluation.csv"%(csv_dir), "w") as file:
     file.write(evaluation_csv)
 
