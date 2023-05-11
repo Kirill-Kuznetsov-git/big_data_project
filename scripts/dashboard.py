@@ -6,7 +6,7 @@ import pandas as pd
 trips_prproc = pd.read_csv("output/trips_preprocessed.csv")
 
 # q1 = pd.read_csv("output/q1.csv")
-# q2 = pd.read_csv("output/q2.csv")
+q2 = pd.read_csv("output/q2.csv")
 # q3 = pd.read_csv("output/q3.csv")
 # q4 = pd.read_csv("output/q4.csv")
 # q5 = pd.read_csv("output/q5.csv")
@@ -20,7 +20,7 @@ trips_prproc = pd.read_csv("output/trips_preprocessed.csv")
 
 
 # TODO: add project name
-st.write("# Big Data Project  \n _Employee Salary_$^{Prediction}$ :sunglasses:  \n", "*Year*: **2023**")
+st.write("# Big Data Project  \n _Estimated travel time for a taxi ride_  \n", "*Year*: **2023**")
 
 
 # # Display the descriptive information of the dataframe
@@ -31,7 +31,7 @@ st.write("# Big Data Project  \n _Employee Salary_$^{Prediction}$ :sunglasses:  
 # hour by call type by trip time sec
 import altair as alt
 c = alt.Chart(trips_prproc).mark_circle().encode(
-    x='hour', y='trip_time_sec', size='call_type', color='call_type', tooltip=['hour', 'trip_time_sec', 'call_type'])
+    x='hour', y='call_type', size='trip_time_sec', color='trip_time_sec', tooltip=['hour', 'call_type', 'trip_time_sec'])
 st.write(c)
 
 
@@ -45,22 +45,50 @@ st.write(c)
 
 # q2 - Day of week
 
-# 
+# countplot / horizontal
+chart = alt.Chart(q2)
+
+# 4. Use the mark_bar() function to create the bars
+chart = chart.mark_bar()
+
+# 5. Set the encoding for the y-axis (y) and x-axis (x)
+chart = chart.encode(
+    y=alt.Y('day_of_week:N', sort='-x'),
+    x=alt.X('trip_time_sec:Q')
+)
+
+# Fifth day of the week has the most number of taxi trips by total time. This higher demand may be correlated with increased traffic that day which can increase the trip duration
 
 # q3 - Hours
 
+# countplot / horizontal
+# We can see that the peak hours for taxi are the most busy hours of the day - when people go to work and when people return from work. This could mean that the city is experiencing higher traffic which leads to longer trip time
+
 # q4 - call type (avg)
+
+# countplot
+# Придумай сам
 
 # q5 - call type (count)
 
+# countplot
+# придумай сам
+
 # q6 - avg, max, min trip time
+
+# count plot 
 
 # q7 - day type
 
 # model 1 - lr
 
+# Linear regression predicts the data perfectly. This could mean that the label is linearly dependant on the features 
+
+# cart with 20 columns
+
 # model 2 - rf
 
+# почему rf плохо подошел
 
 # evaluations
 
