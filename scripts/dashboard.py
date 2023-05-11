@@ -30,10 +30,14 @@ st.write("# Big Data Project  \n _Employee Salary_$^{Prediction}$ :sunglasses:  
 
 # hour by call type by trip time sec
 import altair as alt
-c = alt.Chart(trips_prproc).mark_circle().encode(
-    x='hour', y='call_type', size='trip_time_sec', color='trip_time_sec', tooltip=['hour', 'call_type', 'trip_time_sec'])
-st.write(c)
-
+# c = alt.Chart(trips_prproc).mark_circle().encode(
+#     x='hour', y='call_type', size='trip_time_sec', color='trip_time_sec', tooltip=['hour', 'call_type', 'trip_time_sec'])
+# st.write(c)
+chart = alt.Chart(trips_prproc).mark_point().encode(
+    x='hour',
+    y='call_type',
+    z='trip_time_sec'
+)
 
 
 # q1 - Missing values
