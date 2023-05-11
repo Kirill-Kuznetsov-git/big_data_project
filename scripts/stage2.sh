@@ -19,10 +19,10 @@ spark-submit --jars /usr/hdp/current/hive-client/lib/hive-metastore-1.2.1000.2.6
 
 # merge csv files into one
 
-echo "trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec" > output/trips_preprocessed.csv
+echo "trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,trip_time_sec,year,month,day,hour,day_of_week,polyline_length" > output/trips_preprocessed.csv
 cat output/trips_preprocessed/* >> output/trips_preprocessed.csv
 
-echo "trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec" > output/q1.csv
+echo "trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,trip_time_sec,year,month,day,hour,day_of_week,polyline_length" > output/q1.csv
 cat output/q1/* >> output/q1.csv
 
 echo "day_of_week,avg_trip_time" > output/q2.csv
