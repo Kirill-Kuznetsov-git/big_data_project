@@ -54,11 +54,9 @@ print("\n\n Process Polyline \n\n")
 trips = trips.filter("missing_data == false")
 
 polyline_length_udf = F.udf(lambda x: len(x.split('],'))-1, IntegerType())
-trip_time_sec_udf = F.udf(lambda x: (len(x.split('],'))-1)*15, IntegerType())
 
 # Add a new column with the trip time sec
 trips = trips.withColumn('polyline_length', polyline_length_udf(trips['POLYLINE']))
-trips = trips.withColumn('trip_time_sec', trip_time_sec_udf(trips['POLYLINE']))
 
 # drop where trip time in sec is zero
 trips = trips.where(trips.trip_time_sec != 0)

@@ -41,11 +41,9 @@ print "\n\n Process Polyline \n\n"
 trips = trips.filter("missing_data == false")
 
 polyline_length_udf = F.udf(lambda x: len(x.split('],'))-1, IntegerType())
-trip_time_sec_udf = F.udf(lambda x: (len(x.split('],'))-1)*15, IntegerType())
 
 # Add a new column with the trip time sec
 trips = trips.withColumn('polyline_length', polyline_length_udf(trips['POLYLINE']))
-trips = trips.withColumn('trip_time_sec', trip_time_sec_udf(trips['POLYLINE']))
 
 # drop where trip time in sec is zero
 trips = trips.where(trips.trip_time_sec != 0)
@@ -59,6 +57,18 @@ trips.show(5)
 print "\n\n Extract Insights \n\n"
 
 csv_dir = 'output'
+
+# "Data Size: The total number of records or rows in the dataset"
+data_size_csv = ('data_size,\n%f' % (trips.count()))
+with open("%s/data_size.csv"%(csv_dir), "w") as file:
+    file.write(data_size_csv)
+
+# Data Distribution: The distribution of data across different categories or variables.
+data_size_csv = ('trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,trip_time_sec\nLongType,StringType,DoubleType,DoubleType,IntegerType,LongType,StringType,BooleanType,StringType,IntegerType')
+with open("%s/data_size.csv"%(csv_dir), "w") as file:
+    file.write(data_size_csv)
+
+
 
 missing_vals = trips.select([count(when(col(c).isNull(), c)).alias(c) for c in trips.columns])
 missing_vals.show()
