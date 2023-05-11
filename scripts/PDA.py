@@ -215,7 +215,7 @@ def run_gbt(train_data, test_data):
 
 lr_predictions, lr_rmse, lr_r2 = run_lr(test_data, train_data)
 rf_predictions, rf_rmse, rf_r2 = run_rf(test_data, train_data)
-gbt_predictions, gbt_rmse, gbt_r2 = run_gbt(test_data, train_data)
+# gbt_predictions, gbt_rmse, gbt_r2 = run_gbt(test_data, train_data)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # print metrics
@@ -231,14 +231,14 @@ print("\t- RMSE:", rf_rmse)
 print("\t- R2:", rf_r2)
 rf_predictions.select("trip_time_sec", "prediction").show()
 
-print("Gradient Boosted Tree:")
-print("\t- RMSE:", gbt_rmse)
-print("\t- R2:", gbt_r2)
-gbt_predictions.select("trip_time_sec", "prediction").show()
+# print("Gradient Boosted Tree:")
+# print("\t- RMSE:", gbt_rmse)
+# print("\t- R2:", gbt_r2)
+# gbt_predictions.select("trip_time_sec", "prediction").show()
 
 csv_dir = 'output'
 
-evaluation_csv = ('metic,lr,rf,gbt\nrmse,%f,%f,%f\nr2,%f,%f,%f' %(lr_rmse, rf_rmse, gbt_rmse, lr_r2, rf_r2, gbt_r2))
+evaluation_csv = ('metic,lr,rf,gbt\nrmse,%f,%f,%f\nr2,%f,%f,%f' %(lr_rmse, rf_rmse, 0, lr_r2, rf_r2, 0))
 with open("%s/evaluation.csv"%(csv_dir), "w") as file:
     file.write(evaluation_csv)
 
@@ -252,7 +252,7 @@ rf_predictions.select([F.col(c).cast(StringType()) for c in lr_predictions.colum
 # columns: trip_time_sec,prediction
 rf_predictions.write.csv("%s/rf" % csv_dir)
 
-gbt_predictions = gbt_predictions.select("trip_time_sec", "prediction")
-gbt_predictions.select([F.col(c).cast(StringType()) for c in gbt_predictions.columns])
-# columns: trip_time_sec,prediction
-gbt_predictions.write.csv("%s/gbt" % csv_dir)
+# gbt_predictions = gbt_predictions.select("trip_time_sec", "prediction")
+# gbt_predictions.select([F.col(c).cast(StringType()) for c in gbt_predictions.columns])
+# # columns: trip_time_sec,prediction
+# gbt_predictions.write.csv("%s/gbt" % csv_dir)
