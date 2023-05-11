@@ -10,7 +10,7 @@ from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.ml.tuning import ParamGridBuilder, CrossValidator
 
 
-spark = SparkSession.builder\
+SPARK = SparkSession.builder\
     .appName("BDT Project")\
     .master("local[*]")\
     .config("hive.metastore.uris", "thrift://sandbox-hdp.hortonworks.com:9083")\
@@ -26,79 +26,79 @@ spark = SparkSession.builder\
     .getOrCreate()
 
 
-sc = spark.sparkContext
+SC = SPARK.sparkContext
 
 # decrease number of logs
-sc.setLogLevel('WARN')
+SC.setLogLevel('WARN')
 
-trips = spark.read.format("avro").table('projectdb.trips')
-trips.createOrReplaceTempView('trips')
-trips.printSchema()
+TRIPS = SPARK.read.format("avro").table('projectdb.trips')
+TRIPS.createOrReplaceTempView('trips')
+TRIPS.printSchema()
 
 print "\n\n Process Date \n\n"
 
 # convert timestamp from bigint to timestamp
-trips = trips.withColumn('timestamp', F.from_unixtime(trips['timestamp']))
+TRIPS = TRIPS.withColumn('timestamp', F.from_unixtime(TRIPS['timestamp']))
 
 # add new columns for year, month, day, hour, and day of the week
-trips = trips.withColumn('year', F.date_format('timestamp', 'y')) \
+TRIPS = TRIPS.withColumn('year', F.date_format('timestamp', 'y')) \
     .withColumn('month', F.date_format('timestamp', 'M')) \
     .withColumn('day', F.date_format('timestamp', 'd')) \
     .withColumn('hour', F.date_format('timestamp', 'H')) \
     .withColumn('day_of_week', F.dayofweek(F.to_date('timestamp'))) 
 
 # convert to int
-trips = trips.withColumn('hour', trips['hour'].cast(IntegerType())) \
-    .withColumn('day_of_week', trips['day_of_week'].cast(IntegerType()))
+TRIPS = TRIPS.withColumn('hour', TRIPS['hour'].cast(IntegerType())) \
+    .withColumn('day_of_week', TRIPS['day_of_week'].cast(IntegerType()))
 
 
 print "\n\n Process Polyline \n\n"
 
-trips = trips.filter("missing_data == false")
-trips = trips.withColumn('trip_time_sec', trips['trip_time_sec'].cast(IntegerType()))
+TRIPS = TRIPS.filter("missing_data == false")
+TRIPS = TRIPS.withColumn('trip_time_sec', TRIPS['trip_time_sec'].cast(IntegerType()))
 
 polyline_length_udf = F.udf(lambda x: len(x.split('],'))-1, IntegerType())
 
 # Add a new column with the trip time sec
-trips = trips.withColumn('polyline_length', polyline_length_udf(trips['POLYLINE']))
+TRIPS = TRIPS.withColumn('polyline_length', polyline_length_udf(TRIPS['POLYLINE']))
 
 # drop where trip time in sec is zero
-trips = trips.where(trips.trip_time_sec != 0)
+TRIPS = TRIPS.where(TRIPS.trip_time_sec != 0)
 # drop where null in hours or day of week
-trips = trips.na.drop(subset=["hour","day_of_week"])
+TRIPS = TRIPS.na.drop(subset=["hour","day_of_week"])
 
 # Show the first few rows of the DataFrame
-trips.show(5)
+TRIPS.show(5)
 
 
 print "\n\n Polyline Length and Call Type as features \n\n"
 
 
 # categorical feature label indexing
-indexer = StringIndexer(inputCol="call_type", outputCol="call_type_index")
+INDEXER = StringIndexer(inputCol="call_type", outputCol="call_type_index")
 
 # create OneHotEncoderEstimator
-encoder = OneHotEncoder(inputCols=["call_type_index"],
+ENCODER = OneHotEncoder(inputCols=["call_type_index"],
                         outputCols=["call_type_vec"])
 
-assembler = VectorAssembler(
+ASSEMBLER = VectorAssembler(
     inputCols=["polyline_length", "hour", "day_of_week", "call_type_vec"],
     outputCol="features")
 
-pipeline = Pipeline(stages=[indexer, encoder, assembler])
+PIPELINE = Pipeline(stages=[INDEXER, ENCODER, ASSEMBLER])
 
 # fit and transform dataframe
-pipeline_model = pipeline.fit(trips)
-trips_preprocessed = pipeline_model.transform(trips)
+PIPELINE_MODEL = PIPELINE.fit(TRIPS)
+TRIPS_PREPROCESSED = PIPELINE_MODEL.transform(TRIPS)
 
 # show encoded dataframe
-trips_preprocessed.show()
+TRIPS_PREPROCESSED.show()
 
 # select only relevant columns for model
-trips_data = trips_preprocessed.select("features", "trip_time_sec")
+TRIPS_DATA = TRIPS_PREPROCESSED.select("features", "trip_time_sec")
 
 # Train-Test split
-train_data, test_data = trips_data.randomSplit([0.7, 0.3], seed=1337)
+TRAIN_DATA, TEST_DATA = TRIPS_DATA.randomSplit([0.7, 0.3], seed=1337)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -216,8 +216,8 @@ def run_gbt(train_data, test_data):
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # run models
-lr_predictions, lr_rmse, lr_r2 = run_lr(test_data, train_data)
-rf_predictions, rf_rmse, rf_r2 = run_rf(test_data, train_data)
+LR_PREDICTIONS, LR_RMSE, LR_R2 = run_lr(TEST_DATA, TRAIN_DATA)
+RF_PREDICTIONS, RF_RMSE, RF_R2 = run_rf(TEST_DATA, TRAIN_DATA)
 # gbt_predictions, gbt_rmse, gbt_r2 = run_gbt(test_data, train_data)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -225,36 +225,36 @@ rf_predictions, rf_rmse, rf_r2 = run_rf(test_data, train_data)
 
 print "METRICS:"
 print "Linear Regression:"
-print "\t- RMSE:", lr_rmse
-print "\t- R2:", lr_r2
-lr_predictions.select("trip_time_sec", "prediction").show()
+print "\t- RMSE:", LR_RMSE
+print "\t- R2:", LR_R2
+LR_PREDICTIONS.select("trip_time_sec", "prediction").show()
 
 print "Random Forest:"
-print "\t- RMSE:", rf_rmse
-print "\t- R2:", rf_r2
-rf_predictions.select("trip_time_sec", "prediction").show()
+print "\t- RMSE:", RF_RMSE
+print "\t- R2:", RF_R2
+RF_PREDICTIONS.select("trip_time_sec", "prediction").show()
 
 # print("Gradient Boosted Tree:")
 # print("\t- RMSE:", gbt_rmse)
 # print("\t- R2:", gbt_r2)
 # gbt_predictions.select("trip_time_sec", "prediction").show()
 
-csv_dir = 'output'
+CSV_DIR = 'output'
 
-evaluation_csv = ('metic,lr,rf,gbt\nrmse,%f,%f,%f\nr2,%f,%f,%f'
-                  %(lr_rmse, rf_rmse, 0, lr_r2, rf_r2, 0))
-with open("%s/evaluation.csv"%(csv_dir), "w") as file:
-    file.write(evaluation_csv)
+EVALUATION_CSV = ('metic,lr,rf,gbt\nrmse,%f,%f,%f\nr2,%f,%f,%f'
+                  %(LR_RMSE, RF_RMSE, 0, LR_R2, RF_R2, 0))
+with open("%s/evaluation.csv"%(CSV_DIR), "w") as file:
+    file.write(EVALUATION_CSV)
 
-lr_predictions = lr_predictions.select("trip_time_sec", "prediction")
-lr_predictions.select([F.col(c).cast(StringType()) for c in lr_predictions.columns])
+LR_PREDICTIONS = LR_PREDICTIONS.select("trip_time_sec", "prediction")
+LR_PREDICTIONS.select([F.col(c).cast(StringType()) for c in LR_PREDICTIONS.columns])
 # columns: trip_time_sec,prediction
-lr_predictions.write.csv("%s/lr" % csv_dir)
+LR_PREDICTIONS.write.csv("%s/lr" % CSV_DIR)
 
-rf_predictions = rf_predictions.select("trip_time_sec", "prediction")
-rf_predictions.select([F.col(c).cast(StringType()) for c in lr_predictions.columns])
+RF_PREDICTIONS = RF_PREDICTIONS.select("trip_time_sec", "prediction")
+RF_PREDICTIONS.select([F.col(c).cast(StringType()) for c in RF_PREDICTIONS.columns])
 # columns: trip_time_sec,prediction
-rf_predictions.write.csv("%s/rf" % csv_dir)
+RF_PREDICTIONS.write.csv("%s/rf" % CSV_DIR)
 
 # gbt_predictions = gbt_predictions.select("trip_time_sec", "prediction")
 # gbt_predictions.select([F.col(c).cast(StringType()) for c in gbt_predictions.columns])

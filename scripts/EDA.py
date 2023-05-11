@@ -20,6 +20,11 @@ SPARK = SparkSession.builder\
     .enableHiveSupport()\
     .getOrCreate()
 
+SC = SPARK.sparkContext
+
+# decrease number of logs
+SC.setLogLevel('WARN')
+
 TRIPS = SPARK.read.format("avro").table('projectdb.trips')
 TRIPS.createOrReplaceTempView('trips')
 
