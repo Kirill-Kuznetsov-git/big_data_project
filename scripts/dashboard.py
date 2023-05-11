@@ -143,5 +143,15 @@ st.write(evals)
 
 # result
 st.write("# Results")
-st.write()
+st.write("We make all stages: move data PG->HDFS->HIVE, then extract 6-th insights from"
+         "features for next step prediction. From this insights we got that only some "
+         "of the features are useful and only call type, day of week of trip start, hour of trip start and polyline"
+         "length are impactful for prediction. We analyzed a dataset and found that one of its labels had"
+         " a linear correlation with some of its features. To predict this label, we used two algorithms:"
+         " Linear Regression and Random Forest Regression. Our results showed that Linear Regression performed"
+         " better with an R2 score of 1 and an RMSE of 1.7, indicating that this algorithm can accurately predict"
+         " the label using linear equations. In contrast, Random Forest Regression had an R2 score of 0.6 and an"
+         " RMSE of 436.3, showing that this algorithm is less accurate for this dataset and may not be the best choice"
+         " for predicting the label. Overall, our findings suggest that Linear Regression is a more suitable algorithm"
+         " for predicting the label in this dataset.")
 # ---------
