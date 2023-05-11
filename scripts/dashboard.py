@@ -38,7 +38,8 @@ st.write(c)
 
 # q1 - Missing values
 
-
+trip_description = trips.describe()
+st.write(trip_description)
 
 # q2 - Day of week
 
