@@ -101,7 +101,7 @@ train_data, test_data = trips_data.randomSplit([0.7, 0.3], seed=1337)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # MODEL 1 - Linear Regression
 
-def run_lr():
+def run_lr(train_data, test_data):
     print("\n\n MODEL 1 - Linear Regression \n\n")
 
 
