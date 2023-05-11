@@ -1,65 +1,65 @@
 import streamlit as st
+import altair as alt
 
 import pandas as pd
 
-trips = pd.read_csv("data/trips.tsv", sep="\t")
-trips_prproc = pd.read_csv("output/trips_preprocessed.csv")
+TRIPS = pd.read_csv("data/trips.tsv", sep="\t")
+TRIPS_PRPROC = pd.read_csv("output/trips_preprocessed.csv")
 
-q1 = pd.read_csv("output/q1.csv")
-q2 = pd.read_csv("output/q2.csv")
-q3 = pd.read_csv("output/q3.csv")
-q4 = pd.read_csv("output/q4.csv")
-q5 = pd.read_csv("output/q5.csv")
-q6 = pd.read_csv("output/q6.csv")
-q7 = pd.read_csv("output/q7.csv")
+Q1 = pd.read_csv("output/q1.csv")
+Q2 = pd.read_csv("output/q2.csv")
+Q3 = pd.read_csv("output/q3.csv")
+Q4 = pd.read_csv("output/q4.csv")
+Q5 = pd.read_csv("output/q5.csv")
+Q6 = pd.read_csv("output/q6.csv")
+Q7 = pd.read_csv("output/q7.csv")
 
-evals = pd.read_csv("output/evaluation.csv")
-lr = pd.read_csv("output/lr.csv")
-rf = pd.read_csv("output/rf.csv")
-
+EVALS = pd.read_csv("output/evaluation.csv")
+LR = pd.read_csv("output/lr.csv")
+RF = pd.read_csv("output/rf.csv")
 
 st.write("# Big Data Project  \n _Estimated travel time for a taxi ride_  \n", "*Year*: **2023**")
 st.write("")
 
 # Display the descriptive information of the dataframe
 
-trip_description = trips.describe()
-st.write(trip_description)
+TRIP_DESCRIPTION = TRIPS.describe()
+st.write(TRIP_DESCRIPTION)
 
 # hour by call type by trip time sec
 st.write("## Hour of day of start trip and Call type and Trip time sec")
 st.write("Here we show the dependence of trip time"
          " in seconds, call type and hour of start of trip:")
-import altair as alt
-c = alt.Chart(trips_prproc).mark_circle().encode(
+
+C = alt.Chart(TRIPS_PRPROC).mark_circle().encode(
     x='hour', y='call_type', size='trip_time_sec', color='trip_time_sec',
     tooltip=['hour', 'call_type', 'trip_time_sec']).properties(height=300, width=500)
-st.write(c)
+st.write(C)
 
 # ---------
 
 # q1 - Missing values
 st.write("## Missing values")
 st.write("Here we can see the number of missing values for each column."
-          " ORIGIN_CALL and ORIGIN_STAND have too many missing data."
-          " This tells us that we cannot rely on these columns for our predictions:")
-st.write(q1)
+         "ORIGIN_CALL and ORIGIN_STAND have too many missing data."
+         " This tells us that we cannot rely on these columns for our predictions:")
+st.write(Q1)
 
 # ---------
 
 # q2 - Day of week
 st.write("## Day of week and average trip time")
-q2['day_of_week'] = q2['day_of_week'].astype('int')
-q2['avg_trip_time'] = q2['avg_trip_time'].astype('int')
+Q2['day_of_week'] = Q2['day_of_week'].astype('int')
+Q2['avg_trip_time'] = Q2['avg_trip_time'].astype('int')
 st.write("Here we show the distribution of average time trip for different days of week."
          " We can see that values are difference, "
          "so we can use this feature for out prediction of trip time:")
 # countplot / horizontal
-chart_q2 = alt.Chart(q2).mark_bar().encode(
+CHART_Q2 = alt.Chart(Q2).mark_bar().encode(
     x="day_of_week:O",
     y="avg_trip_time:Q").properties(height=300, width=500)
 
-st.write(chart_q2)
+st.write(CHART_Q2)
 
 st.write("Fifth day of the week has the most number of taxi trips by total time."
          " This higher demand may be correlated with "
@@ -69,16 +69,16 @@ st.write("Fifth day of the week has the most number of taxi trips by total time.
 
 # q3 - Hours
 st.write("## Hour of start trip start and average trip time")
-q3['hour'] = q3['hour'].astype('int')
-q3['avg_trip_time'] = q3['avg_trip_time'].astype('int')
+Q3['hour'] = Q3['hour'].astype('int')
+Q3['avg_trip_time'] = Q3['avg_trip_time'].astype('int')
 st.write("Here we show the distribution of average time trip for different hours of day."
          " We can see that values are difference, "
          "so we can use this feature for out prediction of trip time:")
 # countplot / horizontal
-chart_q3 = alt.Chart(q3).mark_bar().encode(
+CHART_Q3 = alt.Chart(Q3).mark_bar().encode(
     x="hour:O",
     y="avg_trip_time:Q").properties(height=300, width=500)
-st.write(chart_q3)
+st.write(CHART_Q3)
 st.write("We can see that the peak hours for taxi are the most busy hours of the day "
          "- when people go to work and when people return from work. "
          "This could mean that the city is "
@@ -88,22 +88,22 @@ st.write("We can see that the peak hours for taxi are the most busy hours of the
 
 # q4 - call type (avg)
 st.write("## Call type and average trip time with trip's count")
-q4['avg_trip_time'] = q4['avg_trip_time'].astype('int')
+Q4['avg_trip_time'] = Q4['avg_trip_time'].astype('int')
 st.write("Here we show the distributions of average time trip for"
          " different call types and cout of trips for difference call types."
          " We can see that values are difference, "
          "so we can use this feature for out prediction of trip time:")
 # countplot / horizontal
-chart_q4 = alt.Chart(q4).mark_bar().encode(
+CHART_Q4 = alt.Chart(Q4).mark_bar().encode(
     x="call_type:O",
     y="avg_trip_time:Q").properties(height=300, width=500)
-st.write(chart_q4)
+st.write(CHART_Q4)
 
-q5['count_trip_time'] = q5['count_trip_time'].astype('int')
-chart_q5 = alt.Chart(q5).mark_bar().encode(
+Q5['count_trip_time'] = Q5['count_trip_time'].astype('int')
+CHART_Q5 = alt.Chart(Q5).mark_bar().encode(
     x="call_type:O",
     y="count_trip_time:Q").properties(height=300, width=500)
-st.write(chart_q5)
+st.write(CHART_Q5)
 # ---------
 
 # q7 - day type
@@ -114,27 +114,27 @@ st.write("Here we show distribution of trips for difference day type:"
          "A-any other normal day."
          "In distribution we can see that all trips was in normal day,"
          " so we don't need to use this feature in trip time prediction:")
-q7['count'] = q7['count'].astype('int')
-chart_q7 = alt.Chart(q7).mark_bar().encode(
+Q7['count'] = Q7['count'].astype('int')
+CHART_Q7 = alt.Chart(Q7).mark_bar().encode(
     x="day_type:O",
     y="count:Q").properties(height=300, width=500)
-st.write(chart_q7)
+st.write(CHART_Q7)
 # ---------
 
 # model 1 - lr
 st.write("## Result of linear regression on test dataset")
 st.write("Linear regression predicts the data perfectly."
          " This could mean that the label is linearly dependent on the features:")
-lr = lr.sample(10, random_state=42)
-st.write(lr)
+RF = RF.sample(10, random_state=42)
+st.write(RF)
 
 # ---------
 
 # model 2 - rf
 st.write("## Result of random forest on test dataset")
 st.write("Random forest tree regression does not show such good results as linear regression:")
-rf = rf.sample(10, random_state=42)
-st.write(rf)
+RF = RF.sample(10, random_state=42)
+st.write(RF)
 
 # ---------
 
@@ -142,8 +142,8 @@ st.write(rf)
 st.write("## Final evaluation")
 st.write("Final metric's evaluation for random forent tree"
          " and linear regression and comparing of these two methods:")
-evals = evals.drop(columns=['gbt'])
-st.write(evals)
+EVALS = EVALS.drop(columns=['gbt'])
+st.write(EVALS)
 
 # ---------
 

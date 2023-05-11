@@ -13,7 +13,7 @@ spark = SparkSession.builder\
     .appName("BDT Project")\
     .master("local[*]")\
     .config("hive.metastore.uris", "thrift://sandbox-hdp.hortonworks.com:9083")\
-    .config("spark.sql.catalogImplementation","hive")\
+    .config("spark.sql.catalogImplementation", "hive")\
     .config("spark.sql.avro.compression.codec", "snappy")\
     .config("spark.jars", "file:///usr/hdp/current/hive-client/lib/"
                           "hive-metastore-1.2.1000.2.6.5.0-292.jar,file:///"
@@ -34,7 +34,7 @@ trips = spark.read.format("avro").table('projectdb.trips')
 trips.createOrReplaceTempView('trips')
 trips.printSchema()
 
-print("\n\n Process Date \n\n")
+print "\n\n Process Date \n\n"
 
 # convert timestamp from bigint to timestamp
 trips = trips.withColumn('timestamp', F.from_unixtime(trips['timestamp']))
@@ -51,7 +51,7 @@ trips = trips.withColumn('hour', trips['hour'].cast(IntegerType())) \
     .withColumn('day_of_week', trips['day_of_week'].cast(IntegerType()))
 
 
-print("\n\n Process Polyline \n\n")
+print "\n\n Process Polyline \n\n"
 
 trips = trips.filter("missing_data == false")
 trips = trips.withColumn('trip_time_sec', trips['trip_time_sec'].cast(IntegerType()))
@@ -70,7 +70,7 @@ trips = trips.na.drop(subset=["hour","day_of_week"])
 trips.show(5)
 
 
-print("\n\n Polyline Length and Call Type as features \n\n")
+print "\n\n Polyline Length and Call Type as features \n\n"
 
 
 # categorical feature label indexing
@@ -104,7 +104,7 @@ train_data, test_data = trips_data.randomSplit([0.7, 0.3], seed=1337)
 # MODEL 1 - Linear Regression
 
 def run_lr(train_data, test_data):
-    print("\n\n MODEL 1 - Linear Regression \n\n")
+    print "\n\n MODEL 1 - Linear Regression \n\n"
 
 
     # define the model
@@ -142,7 +142,7 @@ def run_lr(train_data, test_data):
 # MODEL 2 - Random Forest
 
 def run_rf(train_data, test_data):
-    print("\n\n MODEL 2 - Random Forest \n\n")
+    print "\n\n MODEL 2 - Random Forest \n\n"
 
     rf = RandomForestRegressor(featuresCol="features", labelCol="trip_time_sec")
 
@@ -179,7 +179,7 @@ def run_rf(train_data, test_data):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # MODEL 3 - Gradient Boosted Tree
 def run_gbt(train_data, test_data):
-    print("\n\n MODEL 3 - Gradient Boosted Tree \n\n")
+    print "\n\n MODEL 3 - Gradient Boosted Tree \n\n"
 
     gbt = GBTRegressor(featuresCol="features", labelCol="trip_time_sec")
 
@@ -224,15 +224,15 @@ rf_predictions, rf_rmse, rf_r2 = run_rf(test_data, train_data)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # print metrics
 
-print("METRICS:")
-print("Linear Regression:")
-print("\t- RMSE:", lr_rmse)
-print("\t- R2:", lr_r2)
+print "METRICS:"
+print "Linear Regression:"
+print "\t- RMSE:", lr_rmse
+print "\t- R2:", lr_r2
 lr_predictions.select("trip_time_sec", "prediction").show()
 
-print("Random Forest:")
-print("\t- RMSE:", rf_rmse)
-print("\t- R2:", rf_r2)
+print "Random Forest:"
+print "\t- RMSE:", rf_rmse
+print "\t- R2:", rf_r2
 rf_predictions.select("trip_time_sec", "prediction").show()
 
 # print("Gradient Boosted Tree:")
