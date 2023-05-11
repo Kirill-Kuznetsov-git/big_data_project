@@ -62,8 +62,8 @@ st.write("Fifth day of the week has the most number of taxi trips by total time.
 # ---------
 
 # q3 - Hours
-q3['hour'] = q2['hour'].astype('int')
-q3['avg_trip_time'] = q2['avg_trip_time'].astype('int')
+q3['hour'] = q3['hour'].astype('int')
+q3['avg_trip_time'] = q3['avg_trip_time'].astype('int')
 st.write("Here we show the distribution of average time trip for different hours of day. We can see that values are difference, "
          "so we can use this feature for out prediction of trip time.")
 # countplot / horizontal
@@ -80,8 +80,8 @@ st.write("We can see that the peak hours for taxi are the most busy hours of the
 # q4 - call type (avg)
 
 # countplot
-q4['call_type'] = q2['call_type']
-q4['avg_trip_time'] = q2['avg_trip_time'].astype('int')
+q4['call_type'] = q4['call_type']
+q4['avg_trip_time'] = q4['avg_trip_time'].astype('int')
 st.write("Here we show the distributions of average time trip for different call types and cout of trips for difference call types. We can see that values are difference, "
          "so we can use this feature for out prediction of trip time.")
 # countplot / horizontal
@@ -89,9 +89,12 @@ chart_q4 = alt.Chart(q4).mark_bar().encode(
     x="call_type:O",
     y="avg_trip_time:Q").properties(height=300, width=500)
 st.write(chart_q4)
+
+q4['call_type'] = q4['call_type']
+q4['count_trip_time'] = q4['count_trip_time'].astype('int')
 chart_q5 = alt.Chart(q5).mark_bar().encode(
     x="call_type:O",
-    y="avg_trip_time:Q").properties(height=300, width=500)
+    y="count_trip_time:Q").properties(height=300, width=500)
 st.write(chart_q5)
 # ---------
 
