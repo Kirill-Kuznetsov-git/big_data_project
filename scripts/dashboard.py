@@ -34,7 +34,7 @@ c = alt.Chart(trips_prproc).mark_circle().encode(
     x='hour', y='call_type', size='trip_time_sec', color='trip_time_sec', tooltip=['hour', 'call_type', 'trip_time_sec'])
 st.write(c)
 
-
+# ---------
 
 # q1 - Missing values
 
@@ -43,42 +43,53 @@ st.write(c)
 # trip_description = trips.describe()
 # st.write(trip_description)
 
+# ---------
+
 # q2 - Day of week
 
 # countplot / horizontal
 chart = alt.Chart(q2)
-
-# 4. Use the mark_bar() function to create the bars
 chart = chart.mark_bar()
-
-# 5. Set the encoding for the y-axis (y) and x-axis (x)
 chart = chart.encode(
     y=alt.Y('day_of_week:N', sort='-x'),
     x=alt.X('trip_time_sec:Q')
 )
+st.write(chart)
 
 # Fifth day of the week has the most number of taxi trips by total time. This higher demand may be correlated with increased traffic that day which can increase the trip duration
+
+# ---------
 
 # q3 - Hours
 
 # countplot / horizontal
 # We can see that the peak hours for taxi are the most busy hours of the day - when people go to work and when people return from work. This could mean that the city is experiencing higher traffic which leads to longer trip time
 
+# ---------
+
 # q4 - call type (avg)
 
 # countplot
 # Придумай сам
+
+# ---------
 
 # q5 - call type (count)
 
 # countplot
 # придумай сам
 
+# ---------
+
 # q6 - avg, max, min trip time
 
 # count plot 
 
+# ---------
+
 # q7 - day type
+
+# ---------
 
 # model 1 - lr
 
@@ -86,9 +97,13 @@ chart = chart.encode(
 
 # cart with 20 columns
 
+# ---------
+
 # model 2 - rf
 
 # почему rf плохо подошел
+
+# ---------
 
 # evaluations
 
