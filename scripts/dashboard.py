@@ -26,6 +26,7 @@ st.write("")
 # st.write(trip_description)
 
 # hour by call type by trip time sec
+st.write("Here we show the dependence of trip time in seconds, call type and hour of start of trip.")
 import altair as alt
 c = alt.Chart(trips_prproc).mark_circle().encode(
     x='hour', y='call_type', size='trip_time_sec', color='trip_time_sec', tooltip=['hour', 'call_type', 'trip_time_sec'])
@@ -36,47 +37,59 @@ st.write(c)
 # q1 - Missing values
 
 # Here we can see that origin_ and origin_ have too many missing data. This tells us that we cannot rely on these tables for our predictions
-
-# trip_description = trips.describe()
-# st.write(trip_description)
+st.write("Here we can see the number of missing values for each column."
+          " ORIGIN_CALL and ORIGIN_STAND have too many missing data."
+          " This tells us that we cannot rely on these tables for our predictions")
+q1 = q1.describe()
+st.write(q1)
 
 # ---------
 
 # q2 - Day of week
 q2['day_of_week'] = q2['day_of_week'].astype('int')
 q2['avg_trip_time'] = q2['avg_trip_time'].astype('int')
-
-# q2 = q2['trip_time_sec'].astype('int')
+st.write("Here we show the distribution of average time trip for different days of week. We can see that values are difference, "
+         "so we can use this feature for out prediction of trip time.")
 # countplot / horizontal
-chart = alt.Chart(q2).mark_bar().encode(
+chart_q2 = alt.Chart(q2).mark_bar().encode(
     x="day_of_week:O",
     y="avg_trip_time:Q").properties(height=300, width=500)
 
 st.write(chart)
 
-# Fifth day of the week has the most number of taxi trips by total time. This higher demand may be correlated with increased traffic that day which can increase the trip duration
+st.write("Fifth day of the week has the most number of taxi trips by total time. This higher demand may be correlated with increased traffic that day which can increase the trip duration")
 
 # ---------
 
 # q3 - Hours
-
+q3['hour'] = q2['hour'].astype('int')
+q3['avg_trip_time'] = q2['avg_trip_time'].astype('int')
+st.write("Here we show the distribution of average time trip for different hours of day. We can see that values are difference, "
+         "so we can use this feature for out prediction of trip time.")
 # countplot / horizontal
-# We can see that the peak hours for taxi are the most busy hours of the day - when people go to work and when people return from work. This could mean that the city is experiencing higher traffic which leads to longer trip time
+chart_q3 = alt.Chart(q3).mark_bar().encode(
+    x="hour:O",
+    y="avg_trip_time:Q").properties(height=300, width=500)
+st.write("We can see that the peak hours for taxi are the most busy hours of the day "
+         "- when people go to work and when people return from work. "
+         "This could mean that the city is experiencing higher traffic which leads to longer trip time")
 
 # ---------
 
 # q4 - call type (avg)
 
 # countplot
-# Придумай сам
-
-# ---------
-
-# q5 - call type (count)
-
-# countplot
-# придумай сам
-
+q4['call_type'] = q2['call_type']
+q4['avg_trip_time'] = q2['avg_trip_time'].astype('int')
+st.write("Here we show the distributions of average time trip for different call types and cout of trips for difference call types. We can see that values are difference, "
+         "so we can use this feature for out prediction of trip time.")
+# countplot / horizontal
+chart_q4 = alt.Chart(q4).mark_bar().encode(
+    x="call_type:O",
+    y="avg_trip_time:Q").properties(height=300, width=500)
+chart_q5 = alt.Chart(q5).mark_bar().encode(
+    x="call_type:O",
+    y="avg_trip_time:Q").properties(height=300, width=500)
 # ---------
 
 # q6 - avg, max, min trip time
