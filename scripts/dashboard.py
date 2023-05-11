@@ -2,7 +2,7 @@ import streamlit as st
 
 import pandas as pd
 
-# trips = pd.read_csv("data/trips.tsv", sep="\t")
+trips = pd.read_csv("data/trips.tsv", sep="\t")
 trips_prproc = pd.read_csv("output/trips_preprocessed.csv")
 
 q1 = pd.read_csv("output/q1.csv")
@@ -21,9 +21,10 @@ rf = pd.read_csv("output/rf.csv")
 st.write("# Big Data Project  \n _Estimated travel time for a taxi ride_  \n", "*Year*: **2023**")
 st.write("")
 
-# # Display the descriptive information of the dataframe
-# trip_description = trips.describe()
-# st.write(trip_description)
+# Display the descriptive information of the dataframe
+
+trip_description = trips.describe()
+st.write(trip_description)
 
 # hour by call type by trip time sec
 st.write("## Hour of day of start trip and Call type and Trip time sec")
