@@ -13,7 +13,7 @@ q5 = pd.read_csv("output/q5.csv")
 q6 = pd.read_csv("output/q6.csv")
 q7 = pd.read_csv("output/q7.csv")
 
-evals = pd.read_csv("output/evaluations.csv")
+evals = pd.read_csv("output/evaluation.csv")
 lr = pd.read_csv("output/lr.csv")
 rf = pd.read_csv("output/rf.csv")
 
