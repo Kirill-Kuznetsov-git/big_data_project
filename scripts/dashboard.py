@@ -26,7 +26,7 @@ st.write("")
 # st.write(trip_description)
 
 # hour by call type by trip time sec
-st.write("## Hour by Call type by Trip time sec")
+st.write("## Hour of day of start trip and Call type and Trip time sec")
 st.write("Here we show the dependence of trip time in seconds, call type and hour of start of trip:")
 import altair as alt
 c = alt.Chart(trips_prproc).mark_circle().encode(
@@ -64,7 +64,7 @@ st.write("Fifth day of the week has the most number of taxi trips by total time.
 # ---------
 
 # q3 - Hours
-st.write("## Hour of trip start and average trip time")
+st.write("## Hour of start trip start and average trip time")
 q3['hour'] = q3['hour'].astype('int')
 q3['avg_trip_time'] = q3['avg_trip_time'].astype('int')
 st.write("Here we show the distribution of average time trip for different hours of day."
@@ -82,7 +82,7 @@ st.write("We can see that the peak hours for taxi are the most busy hours of the
 # ---------
 
 # q4 - call type (avg)
-st.write("## Call type and average trip time and trip count")
+st.write("## Call type and average trip time with trip's count")
 q4['avg_trip_time'] = q4['avg_trip_time'].astype('int')
 st.write("Here we show the distributions of average time trip for"
          " different call types and cout of trips for difference call types."
@@ -117,7 +117,7 @@ st.write(chart_q7)
 # ---------
 
 # model 1 - lr
-st.write("## Result of linear regression on test dataset.")
+st.write("## Result of linear regression on test dataset")
 st.write("Linear regression predicts the data perfectly."
          " This could mean that the label is linearly dependent on the features:")
 lr = lr.head(10)
@@ -126,7 +126,7 @@ st.write(lr)
 # ---------
 
 # model 2 - rf
-st.write("## Result of random forest on test dataset.")
+st.write("## Result of random forest on test dataset")
 st.write("Random forest tree regression does not show such good results as linear regression:")
 rf = rf.head(10)
 st.write(rf)
@@ -134,7 +134,7 @@ st.write(rf)
 # ---------
 
 # evaluations
-st.write("## Final evaluation.")
+st.write("## Final evaluation")
 st.write("Final metric's evaluation for random forent tree and linear regression and comparing of these two methods:")
 evals = evals.drop(columns=['gbt'])
 st.write(evals)
