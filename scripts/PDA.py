@@ -177,8 +177,8 @@ paramGrid = ParamGridBuilder() \
     .build()
 
 # Define the cross-validation object
-cv = CrossValidator(estimator=pipeline, 
-                    estimatorParamMaps=paramGrid, 
+cv = CrossValidator(estimator=gbt,
+                    estimatorParamMaps=paramGrid,
                     evaluator=evaluator_rmse, 
                     numFolds=4)
 
