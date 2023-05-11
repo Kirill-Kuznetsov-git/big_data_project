@@ -207,6 +207,11 @@ print("\t- RMSE:", rf_rmse)
 print("\t- R2:", rf_r2)
 rf_predictions.select("trip_time_sec", "prediction").show()
 
+print("Gradient Boosted Tree:")
+print("\t- RMSE:", gbt_rmse)
+print("\t- R2:", gbt_r2)
+gbt_predictions.select("trip_time_sec", "prediction").show()
+
 csv_dir = 'output'
 
 evaluation_csv = ('metic,lr,rf,gbt\nrmse,%f,%f,%f\nr2,%f,%f,%f' %(lr_rmse, rf_rmse, gbt_rmse, lr_r2, rf_r2, gbt_r2))
