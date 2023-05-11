@@ -90,8 +90,8 @@ chart_q4 = alt.Chart(q4).mark_bar().encode(
     y="avg_trip_time:Q").properties(height=300, width=500)
 st.write(chart_q4)
 
-q4['call_type'] = q4['call_type']
-q4['count_trip_time'] = q4['count_trip_time'].astype('int')
+q5['call_type'] = q5['call_type']
+q5['count_trip_time'] = q5['count_trip_time'].astype('int')
 chart_q5 = alt.Chart(q5).mark_bar().encode(
     x="call_type:O",
     y="count_trip_time:Q").properties(height=300, width=500)
