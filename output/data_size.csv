@@ -1,0 +1,2 @@
+trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,day_type,missing_data,polyline,trip_time_sec
+LongType,StringType,DoubleType,DoubleType,IntegerType,LongType,StringType,BooleanType,StringType,IntegerType
