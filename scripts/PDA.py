@@ -1,4 +1,4 @@
-"""Module providing PDA."""
+"""Module providing pda."""
 import pyspark.sql.functions as F
 from pyspark.sql import SparkSession
 from pyspark.sql.types import IntegerType, StringType
@@ -45,7 +45,7 @@ TRIPS = TRIPS.withColumn('year', F.date_format('timestamp', 'y')) \
     .withColumn('month', F.date_format('timestamp', 'M')) \
     .withColumn('day', F.date_format('timestamp', 'd')) \
     .withColumn('hour', F.date_format('timestamp', 'H')) \
-    .withColumn('day_of_week', F.dayofweek(F.to_date('timestamp'))) 
+    .withColumn('day_of_week', F.dayofweek(F.to_date('timestamp')))
 
 # convert to int
 TRIPS = TRIPS.withColumn('hour', TRIPS['hour'].cast(IntegerType())) \
@@ -65,7 +65,7 @@ TRIPS = TRIPS.withColumn('polyline_length', polyline_length_udf(TRIPS['POLYLINE'
 # drop where trip time in sec is zero
 TRIPS = TRIPS.where(TRIPS.trip_time_sec != 0)
 # drop where null in hours or day of week
-TRIPS = TRIPS.na.drop(subset=["hour","day_of_week"])
+TRIPS = TRIPS.na.drop(subset=["hour", "day_of_week"])
 
 # Show the first few rows of the DataFrame
 TRIPS.show(5)
@@ -103,79 +103,79 @@ TRAIN_DATA, TEST_DATA = TRIPS_DATA.randomSplit([0.7, 0.3], seed=1337)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # MODEL 1 - Linear Regression
-
+"""Function for run linear regression."""
 def run_lr(train_data, test_data):
     print "\n\n MODEL 1 - Linear Regression \n\n"
 
 
     # define the model
-    lr = LinearRegression(featuresCol="features", labelCol="trip_time_sec")
+    LR = LinearRegression(featuresCol="features", labelCol="trip_time_sec")
 
     # define the grid of hyperparameters to search
-    param_grid = ParamGridBuilder() \
-        .addGrid(lr.regParam, [0.01, 0.1, 1.0]) \
-        .addGrid(lr.elasticNetParam, [0.0, 0.5, 1.0]) \
+    PARAM_GID = ParamGridBuilder() \
+        .addGrid(LR.regParam, [0.01, 0.1, 1.0]) \
+        .addGrid(LR.elasticNetParam, [0.0, 0.5, 1.0]) \
         .build()
 
     # # define the evaluator to use
-    evaluator_rmse = RegressionEvaluator(metricName="rmse", labelCol="trip_time_sec")
-    evaluator_r2 = RegressionEvaluator(metricName="r2", labelCol="trip_time_sec")
+    EVALUATOR_RMSE = RegressionEvaluator(metricName="rmse", labelCol="trip_time_sec")
+    EVALUATOR_R2 = RegressionEvaluator(metricName="r2", labelCol="trip_time_sec")
 
     # define the cross-validator to use
-    cv = CrossValidator(estimator=lr, estimatorParamMaps=param_grid,
-                        evaluator=evaluator_rmse, numFolds=4)
+    CV = CrossValidator(estimator=LR, estimatorParamMaps=PARAM_GID,
+                        evaluator=EVALUATOR_RMSE, numFolds=4)
 
     # fit the model using the cross-validator
-    cv_model = cv.fit(train_data)
+    CV_MODEL = CV.fit(train_data)
 
     # get the best model from the cross-validator
-    best_model = cv_model.bestModel
+    BEST_MODEL = CV_MODEL.bestModel
 
-    lr_predictions = best_model.transform(test_data)
-    lr_rmse = evaluator_rmse.evaluate(lr_predictions)
-    lr_r2 = evaluator_r2.evaluate(lr_predictions)
+    LR_PREDICTIONS = BEST_MODEL.transform(test_data)
+    LR_RMSE = EVALUATOR_RMSE.evaluate(LR_PREDICTIONS)
+    LR_R2 = EVALUATOR_R2.evaluate(LR_PREDICTIONS)
 
-    best_model.save("models/LR")
-    
-    return lr_predictions, lr_rmse, lr_r2
+    BEST_MODEL.save("models/LR")
+
+    return LR_PREDICTIONS, LR_RMSE, LR_R2
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # MODEL 2 - Random Forest
-
+"""Function for run random forest."""
 def run_rf(train_data, test_data):
     print "\n\n MODEL 2 - Random Forest \n\n"
 
-    rf = RandomForestRegressor(featuresCol="features", labelCol="trip_time_sec")
+    RF = RandomForestRegressor(featuresCol="features", labelCol="trip_time_sec")
 
     # define the grid of hyperparameters to search
-    param_grid = ParamGridBuilder() \
-        .addGrid(rf.maxDepth, [2, 4, 6]) \
-        .addGrid(rf.numTrees, [10, 50, 100]) \
+    PARAM_GRID = ParamGridBuilder() \
+        .addGrid(RF.maxDepth, [2, 4, 6]) \
+        .addGrid(RF.numTrees, [10, 50, 100]) \
         .build()
 
     # define the evaluator to use
-    evaluator_rmse = RegressionEvaluator(metricName="rmse", labelCol="trip_time_sec")
-    evaluator_r2 = RegressionEvaluator(metricName="r2", labelCol="trip_time_sec")
+    EVALUATOR_RMSE = RegressionEvaluator(metricName="rmse", labelCol="trip_time_sec")
+    EVALUATOR_R2 = RegressionEvaluator(metricName="r2", labelCol="trip_time_sec")
 
 
     # define the cross-validator to use
-    cv = CrossValidator(estimator=rf, estimatorParamMaps=param_grid,
-                        evaluator=evaluator_rmse, numFolds=4)
+    CV = CrossValidator(estimator=RF, estimatorParamMaps=PARAM_GRID,
+                        evaluator=EVALUATOR_RMSE, numFolds=4)
 
     # fit the model using the cross-validator
-    cv_model = cv.fit(train_data)
+    CV_MODEL = CV.fit(train_data)
 
     # get the best model from the cross-validator
-    best_model = cv_model.bestModel
+    BEST_MODEL = CV_MODEL.bestModel
 
     # evaluate the best model on the test data
-    rf_predictions = best_model.transform(test_data)
-    rf_rmse = evaluator_rmse.evaluate(rf_predictions)
-    rf_r2 = evaluator_r2.evaluate(rf_predictions)
+    RF_PREDICTIONS = BEST_MODEL.transform(test_data)
+    RF_RMSE = EVALUATOR_RMSE.evaluate(RF_PREDICTIONS)
+    RF_R2 = EVALUATOR_R2.evaluate(RF_PREDICTIONS)
 
-    best_model.save("models/RF")
+    BEST_MODEL.save("models/RF")
 
-    return rf_predictions, rf_rmse, rf_r2
+    return RF_PREDICTIONS, RF_RMSE, RF_R2
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # MODEL 3 - Gradient Boosted Tree
@@ -193,11 +193,11 @@ def run_gbt(train_data, test_data):
     # define the evaluator to use
     evaluator_rmse = RegressionEvaluator(metricName="rmse", labelCol="trip_time_sec")
     evaluator_r2 = RegressionEvaluator(metricName="r2", labelCol="trip_time_sec")
-    
+
     # Define the cross-validation object
     cv = CrossValidator(estimator=gbt,
                         estimatorParamMaps=paramGrid,
-                        evaluator=evaluator_rmse, 
+                        evaluator=evaluator_rmse,
                         numFolds=4)
 
     # Train the model
@@ -243,8 +243,8 @@ CSV_DIR = 'output'
 
 EVALUATION_CSV = ('metic,lr,rf,gbt\nrmse,%f,%f,%f\nr2,%f,%f,%f'
                   %(LR_RMSE, RF_RMSE, 0, LR_R2, RF_R2, 0))
-with open("%s/evaluation.csv"%(CSV_DIR), "w") as file:
-    file.write(EVALUATION_CSV)
+with open("%s/evaluation.csv"%(CSV_DIR), "w") as file_evaluation_csv:
+    file_evaluation_csv.write(EVALUATION_CSV)
 
 LR_PREDICTIONS = LR_PREDICTIONS.select("trip_time_sec", "prediction")
 LR_PREDICTIONS.select([F.col(c).cast(StringType()) for c in LR_PREDICTIONS.columns])
