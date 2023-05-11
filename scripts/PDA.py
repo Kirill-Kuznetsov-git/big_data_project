@@ -52,6 +52,7 @@ trips = trips.withColumn('hour', trips['hour'].cast(IntegerType())) \
 print("\n\n Process Polyline \n\n")
 
 trips = trips.filter("missing_data == false")
+trips = trips.withColumn('trip_time_sec', trips['trip_time_sec'].cast(IntegerType()))
 
 polyline_length_udf = F.udf(lambda x: len(x.split('],'))-1, IntegerType())
 
