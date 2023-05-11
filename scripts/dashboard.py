@@ -39,7 +39,7 @@ st.write(c)
 # Here we can see that origin_ and origin_ have too many missing data. This tells us that we cannot rely on these tables for our predictions
 st.write("Here we can see the number of missing values for each column."
           " ORIGIN_CALL and ORIGIN_STAND have too many missing data."
-          " This tells us that we cannot rely on these tables for our predictions")
+          " This tells us that we cannot rely on these columns for our predictions")
 st.write(q1)
 
 # ---------
@@ -97,14 +97,15 @@ chart_q5 = alt.Chart(q5).mark_bar().encode(
 st.write(chart_q5)
 # ---------
 
-# q6 - avg, max, min trip time
-
-# count plot 
-
-# ---------
-
 # q7 - day type
 
+st.write("Here we show distribution of trips for difference day type:\nB-holiday or any special day,\nC-day before holiday\nA-any other normal day.\nIn distribution we can see that all trips was in normal day, so we don't need to use this feature in trip time prediction.")
+q7['day_type'] = q7['day_type']
+q7['count'] = q7['count'].astype('int')
+chart_q7 = alt.Chart(q7).mark_bar().encode(
+    x="day_type:O",
+    y="count:Q").properties(height=300, width=500)
+st.write(chart_q7)
 # ---------
 
 # model 1 - lr
