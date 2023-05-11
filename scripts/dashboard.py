@@ -55,7 +55,7 @@ chart_q2 = alt.Chart(q2).mark_bar().encode(
     x="day_of_week:O",
     y="avg_trip_time:Q").properties(height=300, width=500)
 
-st.write(chart)
+st.write(chart_q2)
 
 st.write("Fifth day of the week has the most number of taxi trips by total time. This higher demand may be correlated with increased traffic that day which can increase the trip duration")
 
@@ -70,6 +70,7 @@ st.write("Here we show the distribution of average time trip for different hours
 chart_q3 = alt.Chart(q3).mark_bar().encode(
     x="hour:O",
     y="avg_trip_time:Q").properties(height=300, width=500)
+st.write(chart_q3)
 st.write("We can see that the peak hours for taxi are the most busy hours of the day "
          "- when people go to work and when people return from work. "
          "This could mean that the city is experiencing higher traffic which leads to longer trip time")
@@ -87,9 +88,11 @@ st.write("Here we show the distributions of average time trip for different call
 chart_q4 = alt.Chart(q4).mark_bar().encode(
     x="call_type:O",
     y="avg_trip_time:Q").properties(height=300, width=500)
+st.write(chart_q4)
 chart_q5 = alt.Chart(q5).mark_bar().encode(
     x="call_type:O",
     y="avg_trip_time:Q").properties(height=300, width=500)
+st.write(chart_q5)
 # ---------
 
 # q6 - avg, max, min trip time
