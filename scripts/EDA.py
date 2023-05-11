@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import IntegerType
 
 from pyspark.sql.functions import date_format, to_date, dayofweek,\
-    from_unixtime, avg, count, when, col
+    from_unixtime, when
 
 
 SPARK = SparkSession.builder\
@@ -60,14 +60,14 @@ print "\n\n Extract Insights \n\n"
 
 csv_dir = 'output'
 
-missing_vals = trips.select([count(when(col(c).isNull(), c)).alias(c) for c in trips.columns])
+missing_vals = trips.select([count(when(F.col(c).isNull(), c)).alias(c) for c in trips.columns])
 missing_vals.show()
 print "Missing values\n\n"
 # columns: trip_id,call_type,origin_call,origin_stand,taxi_id,timestamp,
 # day_type,missing_data,polyline,year,month,day,hour,day_of_week,polyline_length,trip_time_sec
 missing_vals.write.csv("%s/q1" % csv_dir)
 
-avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(avg('trip_time_sec').alias('avg_trip_time'))
+avg_trip_time_by_dow = trips.groupBy('day_of_week').agg(F.avg('trip_time_sec').alias('avg_trip_time'))
 avg_trip_time_by_dow = avg_trip_time_by_dow.orderBy('day_of_week')
 avg_trip_time_by_dow.show()
 print "Day of week\n\n"
@@ -75,7 +75,7 @@ print "Day of week\n\n"
 avg_trip_time_by_dow.write.csv("%s/q2" % csv_dir)
 
 
-avg_trip_time_by_h = trips.groupBy('hour').agg(avg('trip_time_sec').alias('avg_trip_time'))
+avg_trip_time_by_h = trips.groupBy('hour').agg(F.avg('trip_time_sec').alias('avg_trip_time'))
 avg_trip_time_by_h = avg_trip_time_by_h.orderBy('hour')
 avg_trip_time_by_h.show()
 print "Hours\n\n"
@@ -85,7 +85,7 @@ avg_trip_time_by_h.write.csv("%s/q3" % csv_dir)
 
 
 avg_trip_time_by_call_t = trips.groupBy('call_type').\
-    agg(avg('trip_time_sec').alias('avg_trip_time'))
+    agg(F.avg('trip_time_sec').alias('avg_trip_time'))
 avg_trip_time_by_call_t.show()
 print "call type (avg)\n\n"
 # columns: call_type,avg_trip_time
@@ -93,7 +93,7 @@ avg_trip_time_by_call_t.write.csv("%s/q4" % csv_dir)
 
 
 count_trip_time_by_call_t = trips.groupBy('call_type').\
-    agg(count('trip_time_sec').alias('count_trip_time'))
+    agg(F.count('trip_time_sec').alias('count_trip_time'))
 count_trip_time_by_call_t.show()
 print "call type (count)\n\n"
 # columns: call_type,count_trip_time
@@ -101,7 +101,7 @@ count_trip_time_by_call_t.write.csv("%s/q5" % csv_dir)
 
 
 # assuming that `trips` is the name of the DataFrame that contains the `trip_time_sec` column
-min_max_avg = trips.agg(avg('trip_time_sec').alias('avg_trip_time'),
+min_max_avg = trips.agg(F.avg('trip_time_sec').alias('avg_trip_time'),
                         F.max('trip_time_sec').alias('max_trip_time'),
                         F.min('trip_time_sec').alias('min_trip_time'))
 min_max_avg.show()
