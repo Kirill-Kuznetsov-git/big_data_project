@@ -120,7 +120,7 @@ st.write(chart_q7)
 st.write("## Result of linear regression on test dataset")
 st.write("Linear regression predicts the data perfectly."
          " This could mean that the label is linearly dependent on the features:")
-lr = lr.sample(10)
+lr = lr.sample(10, random_state=42)
 st.write(lr)
 
 # ---------
@@ -128,7 +128,7 @@ st.write(lr)
 # model 2 - rf
 st.write("## Result of random forest on test dataset")
 st.write("Random forest tree regression does not show such good results as linear regression:")
-rf = rf.sample(10)
+rf = rf.sample(10, random_state=42)
 st.write(rf)
 
 # ---------
