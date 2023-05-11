@@ -9,5 +9,6 @@ CREATE TABLE IF NOT EXISTS trips (
     timestamp BIGINT NOT NULL,
     day_type VARCHAR(10) NOT NULL,
     missing_data BOOLEAN NOT NULL,
-    polyline TEXT NOT NULL
+    polyline TEXT NOT NULL,
+    trip_time_sec INTEGER NOT NULL
 );

@@ -28,3 +28,7 @@ sqoop import-all-tables -Dmapreduce.job.user.classpath.first=true \
  --outdir /project --m 1
 
 echo "Data from csv PG to HDFS imported successfully."
+
+hdfs dfs -put /project/trips.avsc /project/trips.avsc
+
+echo "Avsc file imported from local machine to hdfs successfully."
