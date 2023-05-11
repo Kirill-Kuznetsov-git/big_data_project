@@ -110,15 +110,24 @@ st.write(chart_q7)
 
 # model 1 - lr
 
-# Linear regression predicts the data perfectly. This could mean that the label is linearly dependent on the features
-
-# cart with 20 columns
+st.write("Linear regression predicts the data perfectly. This could mean that the label is linearly dependent on the features")
+lr = lr.head(10)
+st.write(lr)
+# q7['trip_time_sec'] = q7['trip_time_sec'].astype('float')
+# q7['prediction'] = q7['prediction'].astype('float')
 
 # ---------
 
 # model 2 - rf
 
-# почему rf плохо подошел
+st.write("Linear regression predicts the data perfectly. This could mean that the label is linearly dependent on the features")
+# q7['day_type'] = q7['day_type']
+# q7['count'] = q7['count'].astype('int')
+#
+# chart_q7 = alt.Chart(q7).mark_bar().encode(
+#     x="day_type:O",
+#     y="count:Q").properties(height=300, width=500)
+# st.write(chart_q7)
 
 # ---------
 
