@@ -52,7 +52,7 @@ q2['avg_trip_time'] = q2['avg_trip_time'].astype('int')
 # q2 = q2['trip_time_sec'].astype('int')
 # countplot / horizontal
 chart = alt.Chart(q2).mark_bar().encode(
-    x="day_of_week:Q",
+    x="day_of_week:O",
     y="avg_trip_time:Q")
 
 st.write(chart)
