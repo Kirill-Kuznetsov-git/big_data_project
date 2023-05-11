@@ -46,8 +46,8 @@ st.write(c)
 # ---------
 
 # q2 - Day of week
-q2 = q2['day_of_week'].astype('int')
-q2 = q2['trip_time_sec'].astype('int')
+q2['day_of_week'] = q2['day_of_week'].astype('int')
+q2['trip_time_sec'] = q2['trip_time_sec'].astype('int')
 
 # q2 = q2['trip_time_sec'].astype('int')
 # countplot / horizontal
